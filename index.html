@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Logic Studies - Aprenda lógica para concursos públicos de forma visual e interativa"
+    />
+    <title>Logic Studies | Raciocínio Lógico para Concursos</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <span class="logo-icon">🧠</span>
+          <h1>Logic Studies</h1>
+        </div>
+        <p class="tagline">Aprenda a pensar logicamente, passo a passo</p>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Problem Selection Screen -->
+        <section id="problem-list-screen" class="screen active">
+          <h2 class="section-title">Escolha um problema</h2>
+          <div class="problem-cards" id="problemCards">
+            <!-- Cards serão inseridos via JavaScript -->
+          </div>
+        </section>
+
+        <!-- Problem Solving Screen -->
+        <section id="problem-screen" class="screen">
+          <!-- Problem Statement -->
+          <div class="problem-container">
+            <button class="back-btn" id="backBtn"><span>←</span> Voltar</button>
+
+            <div class="problem-header">
+              <span class="difficulty-badge" id="difficultyBadge">Fácil</span>
+              <h2 class="problem-title" id="problemTitle">
+                Título do Problema
+              </h2>
+            </div>
+
+            <div class="problem-statement" id="problemStatement">
+              <!-- Enunciado do problema -->
+            </div>
+          </div>
+
+          <!-- Visualization Area -->
+          <div class="visualization-container">
+            <div class="step-indicator">
+              <span class="step-label">Passo</span>
+              <span class="step-current" id="stepCurrent">0</span>
+              <span class="step-separator">/</span>
+              <span class="step-total" id="stepTotal">0</span>
+            </div>
+
+            <div class="visualization-area" id="visualizationArea">
+              <!-- Tabela, diagrama ou lista será renderizada aqui -->
+            </div>
+          </div>
+
+          <!-- Explanation Area -->
+          <div class="explanation-container">
+            <div class="explanation-header">
+              <span class="explanation-icon">💡</span>
+              <h3>O que estamos fazendo?</h3>
+            </div>
+            <div class="explanation-content" id="explanationContent">
+              <p class="instruction" id="instruction">
+                Clique em "Próximo Passo" para começar!
+              </p>
+              <p class="explanation" id="explanation"></p>
+              <div class="tip" id="tip"></div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="controls-container">
+            <button class="control-btn secondary" id="prevBtn" disabled>
+              <span>←</span> Voltar Passo
+            </button>
+            <button class="control-btn primary" id="nextBtn">
+              Próximo Passo <span>→</span>
+            </button>
+            <button class="control-btn accent" id="solutionBtn">
+              Ver Solução Completa
+            </button>
+            <button class="control-btn reset" id="resetBtn">↺ Recomeçar</button>
+          </div>
+
+          <!-- Summary (shown at the end) -->
+          <div class="summary-container hidden" id="summaryContainer">
+            <div class="summary-header">
+              <span class="summary-icon">✅</span>
+              <h3>Problema Resolvido!</h3>
+            </div>
+            <div class="summary-content">
+              <div class="answer-box">
+                <span class="answer-label">Resposta:</span>
+                <p class="answer-text" id="answerText"></p>
+              </div>
+              <div class="reasoning-box">
+                <span class="reasoning-label">Resumo do Raciocínio:</span>
+                <p class="reasoning-text" id="reasoningText"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>Desenvolvido para estudantes de concursos públicos 📚</p>
+      </footer>
+    </div>
+
+    <script src="js/problems/problemData.js"></script>
+    <script src="js/problems/problemEngine.js"></script>
+    <script src="js/visualizers/tableVisualizer.js"></script>
+    <script src="js/visualizers/listVisualizer.js"></script>
+    <script src="js/visualizers/sequenceVisualizer.js"></script>
+    <script src="js/ui/stepController.js"></script>
+    <script src="js/ui/uiManager.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
