@@ -5,62 +5,44 @@
 
 class UIManager {
     constructor() {
-        this.screens = {
-            list: null,
-            problem: null
-        };
+        this.screens = { list: null, problem: null };
         this.elements = {};
     }
 
-    /**
-     * Initialize with DOM elements
-     */
     init() {
-        // Screens
         this.screens.list = document.getElementById('problem-list-screen');
         this.screens.problem = document.getElementById('problem-screen');
 
-        // Elements
         this.elements = {
-            problemCards: document.getElementById('problemCards'),
-            problemTitle: document.getElementById('problemTitle'),
-            problemStatement: document.getElementById('problemStatement'),
-            difficultyBadge: document.getElementById('difficultyBadge'),
+            problemCards:      document.getElementById('problemCards'),
+            problemTitle:      document.getElementById('problemTitle'),
+            problemStatement:  document.getElementById('problemStatement'),
+            difficultyBadge:   document.getElementById('difficultyBadge'),
             visualizationArea: document.getElementById('visualizationArea'),
-            instruction: document.getElementById('instruction'),
-            explanation: document.getElementById('explanation'),
-            tip: document.getElementById('tip'),
-            summaryContainer: document.getElementById('summaryContainer'),
-            answerText: document.getElementById('answerText'),
-            reasoningText: document.getElementById('reasoningText'),
-            backBtn: document.getElementById('backBtn')
+            instruction:       document.getElementById('instruction'),
+            explanation:       document.getElementById('explanation'),
+            tip:               document.getElementById('tip'),
+            summaryContainer:  document.getElementById('summaryContainer'),
+            answerText:        document.getElementById('answerText'),
+            reasoningText:     document.getElementById('reasoningText'),
+            backBtn:           document.getElementById('backBtn')
         };
 
-        // Bind back button
         if (this.elements.backBtn) {
             this.elements.backBtn.addEventListener('click', () => this.showListScreen());
         }
     }
 
-    /**
-     * Show problem list screen
-     */
     showListScreen() {
         this.screens.list.classList.add('active');
         this.screens.problem.classList.remove('active');
     }
 
-    /**
-     * Show problem solving screen
-     */
     showProblemScreen() {
         this.screens.list.classList.remove('active');
         this.screens.problem.classList.add('active');
     }
 
-    /**
-     * Render problem cards
-     */
     renderProblemCards(problems, onSelect) {
         if (!this.elements.problemCards) return;
 
@@ -87,9 +69,7 @@ class UIManager {
 
         this.elements.problemCards.innerHTML = html;
 
-        // Add click listeners
-        const cards = this.elements.problemCards.querySelectorAll('.problem-card');
-        cards.forEach(card => {
+        this.elements.problemCards.querySelectorAll('.problem-card').forEach(card => {
             card.addEventListener('click', () => {
                 const problemId = parseInt(card.dataset.problemId);
                 if (onSelect) onSelect(problemId);
@@ -97,33 +77,24 @@ class UIManager {
         });
     }
 
-    /**
-     * Get difficulty CSS class
-     */
     getDifficultyClass(difficulty) {
         switch (difficulty.toLowerCase()) {
-            case 'fácil': return 'easy';
-            case 'médio': return 'medium';
+            case 'fácil':  return 'easy';
+            case 'médio':  return 'medium';
             case 'difícil': return 'hard';
-            default: return 'easy';
+            default:       return 'easy';
         }
     }
 
-    /**
-     * Get type label in Portuguese
-     */
     getTypeLabel(type) {
         switch (type) {
-            case 'table': return 'Tabela Lógica';
+            case 'table':    return 'Tabela Lógica';
             case 'sequence': return 'Sequência';
-            case 'order': return 'Ordem/Posição';
-            default: return type;
+            case 'order':    return 'Ordem/Posição';
+            default:         return type;
         }
     }
 
-    /**
-     * Display problem details
-     */
     displayProblem(problem) {
         if (this.elements.problemTitle) {
             this.elements.problemTitle.textContent = problem.title;
@@ -136,10 +107,7 @@ class UIManager {
             this.elements.difficultyBadge.className = `difficulty-badge ${this.getDifficultyClass(problem.difficulty)}`;
         }
 
-        // Hide summary
         this.hideSummary();
-
-        // Reset explanation
         this.updateExplanation({
             instruction: "Clique em 'Próximo Passo' para começar!",
             explanation: "",
@@ -147,9 +115,6 @@ class UIManager {
         });
     }
 
-    /**
-     * Update explanation area
-     */
     updateExplanation(stepData) {
         if (!stepData) {
             if (this.elements.instruction) {
@@ -168,9 +133,7 @@ class UIManager {
         if (this.elements.instruction) {
             this.elements.instruction.textContent = stepData.instruction || "";
             this.elements.instruction.classList.add('explanation-animate');
-            setTimeout(() => {
-                this.elements.instruction.classList.remove('explanation-animate');
-            }, 400);
+            setTimeout(() => this.elements.instruction.classList.remove('explanation-animate'), 400);
         }
 
         if (this.elements.explanation) {
@@ -180,11 +143,8 @@ class UIManager {
         if (this.elements.tip) {
             if (stepData.tip) {
                 this.elements.tip.textContent = "💡 Dica: " + stepData.tip;
-                this.elements.tip.classList.add('visible');
-                this.elements.tip.classList.add('tip-animate');
-                setTimeout(() => {
-                    this.elements.tip.classList.remove('tip-animate');
-                }, 400);
+                this.elements.tip.classList.add('visible', 'tip-animate');
+                setTimeout(() => this.elements.tip.classList.remove('tip-animate'), 400);
             } else {
                 this.elements.tip.textContent = "";
                 this.elements.tip.classList.remove('visible');
@@ -192,9 +152,6 @@ class UIManager {
         }
     }
 
-    /**
-     * Show summary (problem solved)
-     */
     showSummary(answer, reasoning) {
         if (this.elements.summaryContainer) {
             this.elements.summaryContainer.classList.remove('hidden');
@@ -208,9 +165,6 @@ class UIManager {
         }
     }
 
-    /**
-     * Hide summary
-     */
     hideSummary() {
         if (this.elements.summaryContainer) {
             this.elements.summaryContainer.classList.add('hidden');
@@ -218,38 +172,40 @@ class UIManager {
         }
     }
 
-    /**
-     * Get visualizer for problem type
-     */
     getVisualizer(type) {
         switch (type) {
-            case 'table': return tableVisualizer;
+            case 'table':    return tableVisualizer;
             case 'sequence': return sequenceVisualizer;
-            case 'order': return listVisualizer;
-            default: return null;
+            case 'order':    return listVisualizer;
+            default:         return null;
         }
     }
 
-    /**
-     * Render visualization
-     */
     renderVisualization(type, state) {
         const visualizer = this.getVisualizer(type);
-        if (visualizer) {
-            visualizer.render(state);
+        if (visualizer) visualizer.render(state);
+    }
+
+    applyVisualizationAnimation(type, action, state, prevState) {
+        const visualizer = this.getVisualizer(type);
+        if (visualizer?.applyAnimation) {
+            visualizer.applyAnimation(action, state, prevState);
         }
     }
 
-    /**
-     * Apply visualization animation
-     */
-    applyVisualizationAnimation(type, action, state) {
+    // Plays a fast-forward flash then a staggered reveal of the final state cells
+    animateSolutionReveal(type, state) {
+        const area = this.elements.visualizationArea;
+        if (area) {
+            area.classList.add('solution-flash');
+            area.addEventListener('animationend', () => area.classList.remove('solution-flash'), { once: true });
+        }
+
         const visualizer = this.getVisualizer(type);
-        if (visualizer && visualizer.applyAnimation) {
-            visualizer.applyAnimation(action, state);
+        if (visualizer?.animateSolutionReveal) {
+            setTimeout(() => visualizer.animateSolutionReveal(state), 450);
         }
     }
 }
 
-// Create global instance
 const uiManager = new UIManager();

@@ -280,6 +280,7 @@
     background: var(--bg-secondary);
     color: var(--text-secondary);
     font-size: var(--font-size-lg);
+    position: relative; /* required for Anime.js cell animations */
 }
 
 .logic-table td.row-header {
@@ -364,6 +365,30 @@
     font-size: var(--font-size-lg);
 }
 
+/* Arrow wrapper that hosts the floating operation label */
+.seq-gap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.seq-operation {
+    position: absolute;
+    top: -22px;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--color-highlight);
+    background: var(--color-highlight-bg);
+    border: 1px solid var(--color-highlight);
+    padding: 1px var(--space-2);
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
 .sequence-pattern {
     padding: var(--space-4) var(--space-6);
     background: var(--bg-tertiary);
@@ -386,6 +411,61 @@
 /* ==========================================
    Order/Position Visualizer
    ========================================== */
+/* ==========================================
+   Candidates Zone (Order problems)
+   ========================================== */
+.candidates-zone {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+}
+
+.candidates-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-2);
+}
+
+.candidates-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+}
+
+.candidate-chip {
+    padding: var(--space-2) var(--space-4);
+    background: var(--bg-card);
+    border: 1px solid var(--color-highlight);
+    border-radius: var(--radius-md);
+    color: var(--color-highlight);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: all var(--transition-base);
+}
+
+/* ==========================================
+   Info Box (Table problems)
+   ========================================== */
+.info-box {
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+}
+
+.info-item {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    padding: var(--space-1) 0;
+    line-height: 1.5;
+}
+
 .order-container {
     display: flex;
     flex-direction: column;
@@ -640,6 +720,85 @@
 .reasoning-text {
     color: var(--text-secondary);
     line-height: 1.7;
+}
+
+/* ==========================================
+   Toast Notifications
+   ========================================== */
+#toastContainer {
+    position: fixed;
+    top: var(--space-6);
+    right: var(--space-6);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 360px;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: all;
+}
+
+.toast-error {
+    border-color: var(--color-eliminated);
+    background: var(--color-eliminated-bg);
+}
+
+.toast-success {
+    border-color: var(--color-confirmed);
+    background: var(--color-confirmed-bg);
+}
+
+.toast-info {
+    border-color: var(--color-highlight);
+    background: var(--color-highlight-bg);
+}
+
+.toast-icon {
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+}
+
+.toast-message {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+    #toastContainer {
+        top: var(--space-4);
+        right: var(--space-4);
+        left: var(--space-4);
+        max-width: none;
+    }
 }
 
 /* ==========================================
