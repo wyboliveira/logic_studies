@@ -35,7 +35,10 @@
       <main class="main-content">
         <!-- Problem Selection Screen -->
         <section id="problem-list-screen" class="screen active">
-          <h2 class="section-title">Escolha um problema</h2>
+          <div class="list-header">
+            <h2 class="section-title">Escolha um problema</h2>
+            <div class="progress-summary" id="progressSummary" aria-live="polite"></div>
+          </div>
           <div class="problem-cards" id="problemCards">
             <!-- Cards serão inseridos via JavaScript -->
           </div>
@@ -131,6 +134,7 @@
       </footer>
     </div>
 
+    <script src="js/progress/progressManager.js"></script>
     <!-- Anime.js — timeline-based animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" integrity="sha512-aNH2ILn88yMx7O/WUgXnW6xMYbM2oMBR4Dlvl43Nd3R6DxktAaEBKFpbxPBuC4fjkS6Kfb/gKHTUHKbDmwPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/problems/problemData.js"></script>

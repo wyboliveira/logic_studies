@@ -61,6 +61,11 @@ function handleStepChange(action, stepData, isComplete) {
     if (isComplete && action !== 'solution') {
         uiManager.showSummary(problemEngine.getAnswer(), problemEngine.getSummary());
     }
+
+    // Persist progress whenever the problem reaches its final state
+    if (isComplete) {
+        progressManager.markCompleted(problem.id);
+    }
 }
 
 document.addEventListener('keydown', (e) => {

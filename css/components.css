@@ -119,6 +119,103 @@
 }
 
 /* ==========================================
+   Progress Summary (home screen header)
+   ========================================== */
+.list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+.list-header .section-title {
+    margin-bottom: 0;
+}
+
+.progress-summary {
+    min-width: 0;
+}
+
+.progress-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+}
+
+.progress-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.progress-bar {
+    width: 160px;
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-confirmed), #34d399);
+    border-radius: var(--radius-2xl);
+    transition: width 0.6s ease;
+}
+
+.progress-all-done {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-confirmed);
+    background: var(--color-confirmed-bg);
+    border: 1px solid var(--color-confirmed);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-lg);
+    white-space: nowrap;
+}
+
+/* ==========================================
+   Completed Card State
+   ========================================== */
+.problem-card.completed::before {
+    opacity: 1;
+    background: linear-gradient(90deg, var(--color-confirmed), #34d399);
+}
+
+.problem-card.completed {
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.completed-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-confirmed);
+    background: var(--color-confirmed-bg);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+}
+
+@media (max-width: 600px) {
+    .list-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .progress-info {
+        align-items: flex-start;
+    }
+    .progress-bar {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* ==========================================
    Problem Container
    ========================================== */
 .problem-container {

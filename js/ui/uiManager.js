@@ -7,6 +7,9 @@ class UIManager {
     constructor() {
         this.screens = { list: null, problem: null };
         this.elements = {};
+        // Cached for re-render when returning to list screen
+        this._problems = null;
+        this._onSelect = null;
     }
 
     init() {
@@ -15,6 +18,7 @@ class UIManager {
 
         this.elements = {
             problemCards:      document.getElementById('problemCards'),
+            progressSummary:   document.getElementById('progressSummary'),
             problemTitle:      document.getElementById('problemTitle'),
             problemStatement:  document.getElementById('problemStatement'),
             difficultyBadge:   document.getElementById('difficultyBadge'),
@@ -36,6 +40,10 @@ class UIManager {
     showListScreen() {
         this.screens.list.classList.add('active');
         this.screens.problem.classList.remove('active');
+        // Re-render cards to reflect any newly completed problems
+        if (this._problems && this._onSelect) {
+            this.renderProblemCards(this._problems, this._onSelect);
+        }
     }
 
     showProblemScreen() {
@@ -46,11 +54,18 @@ class UIManager {
     renderProblemCards(problems, onSelect) {
         if (!this.elements.problemCards) return;
 
+        this._problems = problems;
+        this._onSelect = onSelect;
+
+        const completedIds = progressManager.getCompletedIds();
+
         let html = '';
         problems.forEach(problem => {
             const difficultyClass = this.getDifficultyClass(problem.difficulty);
+            const isCompleted     = completedIds.includes(problem.id);
+
             html += `
-                <div class="problem-card" data-problem-id="${problem.id}">
+                <div class="problem-card${isCompleted ? ' completed' : ''}" data-problem-id="${problem.id}">
                     <div class="problem-card-header">
                         <div class="problem-card-icon">${problem.icon}</div>
                         <div>
@@ -61,7 +76,10 @@ class UIManager {
                     <div class="problem-card-description">${problem.description}</div>
                     <div class="problem-card-footer">
                         <span class="difficulty-badge ${difficultyClass}">${problem.difficulty}</span>
-                        <span class="problem-card-steps">${problem.steps.length} passos</span>
+                        ${isCompleted
+                            ? '<span class="completed-indicator">✓ Concluído</span>'
+                            : `<span class="problem-card-steps">${problem.steps.length} passos</span>`
+                        }
                     </div>
                 </div>
             `;
@@ -75,14 +93,51 @@ class UIManager {
                 if (onSelect) onSelect(problemId);
             });
         });
+
+        this.updateProgressSummary(problems.length);
+    }
+
+    updateProgressSummary(total) {
+        const el = this.elements.progressSummary;
+        if (!el) return;
+
+        const count = progressManager.getCount();
+
+        if (count === 0) {
+            el.innerHTML = '';
+            return;
+        }
+
+        const pct = Math.round((count / total) * 100);
+
+        if (count === total) {
+            el.innerHTML = `
+                <div class="progress-all-done">
+                    🎉 Todos os ${total} problemas concluídos!
+                </div>
+            `;
+        } else {
+            el.innerHTML = `
+                <div class="progress-info">
+                    <span class="progress-text">${count} de ${total} concluídos</span>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="${count}" aria-valuemin="0" aria-valuemax="${total}">
+                        <div class="progress-bar-fill" style="width: ${pct}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (typeof anime !== 'undefined') {
+            anime({ targets: el, opacity: [0, 1], translateY: [-6, 0], duration: 400, easing: 'easeOutQuart' });
+        }
     }
 
     getDifficultyClass(difficulty) {
         switch (difficulty.toLowerCase()) {
-            case 'fácil':  return 'easy';
-            case 'médio':  return 'medium';
+            case 'fácil':   return 'easy';
+            case 'médio':   return 'medium';
             case 'difícil': return 'hard';
-            default:       return 'easy';
+            default:        return 'easy';
         }
     }
 
@@ -193,7 +248,6 @@ class UIManager {
         }
     }
 
-    // Plays a fast-forward flash then a staggered reveal of the final state cells
     animateSolutionReveal(type, state) {
         const area = this.elements.visualizationArea;
         if (area) {
