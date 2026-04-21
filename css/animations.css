@@ -396,6 +396,23 @@
 .stagger-item:nth-child(6) { animation-delay: 0.6s; }
 
 /* ==========================================
+   Solution Fast-Forward Flash
+   Applied to the visualization area when "Ver Solução" is clicked.
+   Signals a jump to the final state before the staggered reveal plays.
+   ========================================== */
+
+@keyframes solutionFlash {
+    0%   { opacity: 1; filter: none; }
+    30%  { opacity: 0.15; filter: blur(4px) brightness(1.8); }
+    60%  { opacity: 0.15; filter: blur(4px) brightness(1.8); }
+    100% { opacity: 1; filter: none; }
+}
+
+.solution-flash {
+    animation: solutionFlash 0.45s ease forwards;
+}
+
+/* ==========================================
    Reduced Motion Support
    ========================================== */
 
