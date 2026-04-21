@@ -1,0 +1,19 @@
+# Firebase
+.firebase/
+.firebaserc.local
+
+# Node (para quando adicionarmos Vitest/build tools)
+node_modules/
+dist/
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/settings.json
+.idea/
+*.suo
+*.user
