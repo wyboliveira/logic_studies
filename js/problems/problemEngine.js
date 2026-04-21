@@ -214,6 +214,7 @@ class ProblemEngine {
                 break;
             case 'eliminate':
                 if (action.person && action.positions) {
+                    if (!this.state.eliminated) this.state.eliminated = {};
                     action.positions.forEach(pos => {
                         if (!this.state.eliminated[action.person]) {
                             this.state.eliminated[action.person] = [];
