@@ -145,9 +145,12 @@ class ProblemEngine {
         const type = this.currentProblem.type;
 
         switch (type) {
-            case 'table':    this.applyTableAction(action);    break;
-            case 'sequence': this.applySequenceAction(action); break;
-            case 'order':    this.applyOrderAction(action);    break;
+            case 'table':       this.applyTableAction(action);       break;
+            case 'sequence':    this.applySequenceAction(action);    break;
+            case 'order':       this.applyOrderAction(action);       break;
+            case 'proposition': this.applyPropositionAction(action); break;
+            case 'venn':        this.applyVennAction(action);        break;
+            case 'truthfalse':  this.applyTruthAction(action);       break;
         }
 
         if (this.onStateChange) {
@@ -222,6 +225,68 @@ class ProblemEngine {
                         this.state.eliminated[action.person].push(pos);
                     });
                 }
+                break;
+            case 'info':
+                if (!this.state.infos) this.state.infos = [];
+                this.state.infos.push(action.text);
+                break;
+        }
+    }
+
+    applyPropositionAction(action) {
+        switch (action.type) {
+            case 'init':
+                break;
+            case 'activate':
+                this.state.statements = this.state.statements.map(s =>
+                    s.id === action.id ? { ...s, active: true } : s
+                );
+                break;
+            case 'validate':
+                this.state.statements = this.state.statements.map(s =>
+                    s.id === action.id ? { ...s, valid: action.valid } : s
+                );
+                break;
+            case 'info':
+                if (!this.state.infos) this.state.infos = [];
+                this.state.infos.push(action.text);
+                break;
+        }
+    }
+
+    applyVennAction(action) {
+        switch (action.type) {
+            case 'init':
+                break;
+            case 'fill':
+                this.state[action.region] = action.value;
+                break;
+            case 'highlight':
+                if (!this.state.highlighted) this.state.highlighted = [];
+                if (!this.state.highlighted.includes(action.region)) {
+                    this.state.highlighted.push(action.region);
+                }
+                break;
+            case 'info':
+                if (!this.state.infos) this.state.infos = [];
+                this.state.infos.push(action.text);
+                break;
+        }
+    }
+
+    applyTruthAction(action) {
+        switch (action.type) {
+            case 'init':
+                break;
+            case 'activate':
+                this.state.people = this.state.people.map(p =>
+                    p.name === action.name ? { ...p, active: true } : p
+                );
+                break;
+            case 'reveal':
+                this.state.people = this.state.people.map(p =>
+                    p.name === action.name ? { ...p, role: action.role } : p
+                );
                 break;
             case 'info':
                 if (!this.state.infos) this.state.infos = [];

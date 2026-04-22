@@ -1776,6 +1776,342 @@ const PROBLEMS = [
     answer: "Vera: Ciências, Wilson: Matemática, Xana: História, Yago: Geografia, Zara: Português",
     summary: "Estratégia final: Wilson (pista direta) → Vera com 4 eliminações combinadas (pistas 1+6) → confirmação de Vera=Ciências → Zara com 3+1 eliminações → Xana e Yago por exclusão encadeada.",
   },
+
+  // ─── Proposições Lógicas ───────────────────────────────────────────────────
+
+  {
+    id: 31,
+    title: "Modus Ponens",
+    type: "proposition",
+    difficulty: "fácil",
+    icon: "📜",
+    description: "Se P então Q; P; logo Q.",
+    statement: `<p>Considere o argumento:</p>
+      <ol>
+        <li><span class="clue">Se está chovendo, então o chão está molhado.</span></li>
+        <li><span class="clue">Está chovendo.</span></li>
+        <li>Portanto, o chão está molhado.</li>
+      </ol>
+      <p>Este argumento é válido?</p>`,
+    initialState: {
+      statements: [
+        { id: "p1", type: "premise",    text: "Se está chovendo, então o chão está molhado.", active: false },
+        { id: "p2", type: "premise",    text: "Está chovendo.", active: false },
+        { id: "c1", type: "conclusion", text: "Portanto, o chão está molhado.", active: false, valid: null },
+      ],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Leia a primeira premissa", explanation: "P1 é uma implicação: Chuva → Chão molhado.", action: { type: "activate", id: "p1" }, tip: "Em lógica: 'Se P então Q' é uma condicional (P → Q)." },
+      { instruction: "Leia a segunda premissa", explanation: "P2 afirma que o antecedente P (chuva) é verdadeiro.", action: { type: "activate", id: "p2" }, tip: "Quando o antecedente é verdadeiro, precisamos aceitar o consequente." },
+      { instruction: "Aplique o Modus Ponens", explanation: "P1: (Chuva → Molhado). P2: Chuva. Pela regra, concluímos: Molhado. O argumento é VÁLIDO!", action: { type: "validate", id: "c1", valid: true }, tip: null },
+    ],
+    answer: "Argumento Válido — Modus Ponens",
+    summary: "Modus Ponens: se temos (P → Q) e P, podemos deduzir Q. É uma das regras de inferência mais básicas da lógica.",
+  },
+
+  {
+    id: 32,
+    title: "Modus Tollens",
+    type: "proposition",
+    difficulty: "médio",
+    icon: "🔄",
+    description: "Se P então Q; não Q; logo não P.",
+    statement: `<p>Considere o argumento:</p>
+      <ol>
+        <li><span class="clue">Se o animal é mamífero, então ele é vertebrado.</span></li>
+        <li><span class="clue">Este animal não é vertebrado.</span></li>
+        <li>Portanto, este animal não é mamífero.</li>
+      </ol>
+      <p>Este argumento é válido?</p>`,
+    initialState: {
+      statements: [
+        { id: "p1", type: "premise",    text: "Se o animal é mamífero, então ele é vertebrado.", active: false },
+        { id: "p2", type: "premise",    text: "Este animal não é vertebrado.", active: false },
+        { id: "c1", type: "conclusion", text: "Portanto, este animal não é mamífero.", active: false, valid: null },
+      ],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Leia a primeira premissa", explanation: "P1: Mamífero → Vertebrado. A implicação vai de mamífero para vertebrado.", action: { type: "activate", id: "p1" }, tip: "Simbólicamente: M → V." },
+      { instruction: "Leia a segunda premissa", explanation: "P2 nega o consequente: ¬Vertebrado. Sabemos que o animal NÃO é vertebrado.", action: { type: "activate", id: "p2" }, tip: "Negamos Q (consequente). Em símbolos: ¬V." },
+      { instruction: "Aplique o Modus Tollens", explanation: "P1: (M → V). P2: ¬V. Pela contraposição, ¬V implica ¬M. O argumento é VÁLIDO!", action: { type: "validate", id: "c1", valid: true }, tip: null },
+    ],
+    answer: "Argumento Válido — Modus Tollens",
+    summary: "Modus Tollens: se temos (P → Q) e ¬Q, podemos deduzir ¬P. Equivale a aplicar a contrapositiva (¬Q → ¬P).",
+  },
+
+  {
+    id: 33,
+    title: "Silogismo Hipotético",
+    type: "proposition",
+    difficulty: "médio",
+    icon: "⛓️",
+    description: "Se P→Q e Q→R, então P→R.",
+    statement: `<p>Considere o argumento em cadeia:</p>
+      <ol>
+        <li><span class="clue">Se há fumaça, então há fogo.</span></li>
+        <li><span class="clue">Se há fogo, então há perigo.</span></li>
+        <li>Portanto, se há fumaça, então há perigo.</li>
+      </ol>
+      <p>A conclusão se segue logicamente?</p>`,
+    initialState: {
+      statements: [
+        { id: "p1", type: "premise",    text: "Se há fumaça, então há fogo.", active: false },
+        { id: "p2", type: "premise",    text: "Se há fogo, então há perigo.", active: false },
+        { id: "c1", type: "conclusion", text: "Portanto, se há fumaça, então há perigo.", active: false, valid: null },
+      ],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Leia P1", explanation: "P1: Fumaça → Fogo. O consequente de P1 é 'fogo'.", action: { type: "activate", id: "p1" }, tip: "Veja o consequente de P1 — ele aparecerá como antecedente de P2." },
+      { instruction: "Leia P2", explanation: "P2: Fogo → Perigo. O antecedente de P2 é o mesmo consequente de P1!", action: { type: "activate", id: "p2" }, tip: "Quando o consequente de uma premissa é o antecedente da outra, podemos encadear." },
+      { instruction: "Encadeie as implicações", explanation: "Fumaça → Fogo → Perigo. Eliminando o intermediário: Fumaça → Perigo. VÁLIDO!", action: { type: "validate", id: "c1", valid: true }, tip: null },
+    ],
+    answer: "Argumento Válido — Silogismo Hipotético",
+    summary: "Silogismo Hipotético: (P→Q) ∧ (Q→R) ⊢ (P→R). A lógica transitiva permite encadear implicações.",
+  },
+
+  {
+    id: 34,
+    title: "Falácia do Consequente",
+    type: "proposition",
+    difficulty: "difícil",
+    icon: "⚠️",
+    description: "Afirmar o consequente não valida o antecedente.",
+    statement: `<p>Considere o argumento:</p>
+      <ol>
+        <li><span class="clue">Se é cachorro, então é animal.</span></li>
+        <li><span class="clue">É um animal.</span></li>
+        <li>Portanto, é um cachorro.</li>
+      </ol>
+      <p>Este argumento é válido?</p>`,
+    initialState: {
+      statements: [
+        { id: "p1", type: "premise",    text: "Se é cachorro, então é animal.", active: false },
+        { id: "p2", type: "premise",    text: "É um animal.", active: false },
+        { id: "c1", type: "conclusion", text: "Portanto, é um cachorro.", active: false, valid: null },
+      ],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Leia P1", explanation: "P1: Cachorro → Animal. Mas note: existem muitos animais que não são cachorros.", action: { type: "activate", id: "p1" }, tip: "A implicação P→Q não é equivalente a Q→P." },
+      { instruction: "Leia P2", explanation: "P2 afirma o consequente Q ('é animal'). Mas Q ser verdadeiro não implica que P (cachorro) seja verdadeiro.", action: { type: "activate", id: "p2" }, tip: "Gatos, cavalos, pássaros — todos são animais mas não são cachorros." },
+      { instruction: "Identifique a falácia", explanation: "Afirmar o consequente é uma FALÁCIA. Poderia ser um gato, um cavalo... O argumento é INVÁLIDO!", action: { type: "validate", id: "c1", valid: false }, tip: null },
+    ],
+    answer: "Argumento Inválido — Falácia da Afirmação do Consequente",
+    summary: "Afirmar o consequente (Q → P a partir de P→Q) é uma das falácias mais comuns. Q pode ser verdadeiro por muitas razões além de P.",
+  },
+
+  // ─── Diagramas de Venn ────────────────────────────────────────────────────
+
+  {
+    id: 35,
+    title: "Esportes na Turma",
+    type: "venn",
+    difficulty: "fácil",
+    icon: "⚽",
+    description: "Quem pratica futebol, natação ou nenhum dos dois?",
+    statement: `<p>Em uma turma de 30 alunos:</p>
+      <ul>
+        <li><span class="clue">18 praticam futebol</span></li>
+        <li><span class="clue">12 praticam natação</span></li>
+        <li><span class="clue">5 praticam ambos</span></li>
+      </ul>
+      <p>Quantos alunos não praticam nenhum dos dois esportes?</p>`,
+    initialState: {
+      labelA: "Futebol",
+      labelB: "Natação",
+      only_A: null,
+      both: null,
+      only_B: null,
+      neither: null,
+      highlighted: [],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Identifique os que praticam ambos", explanation: "5 alunos estão na interseção (praticam futebol E natação).", action: { type: "fill", region: "both", value: 5 }, tip: "Comece sempre pela interseção — ela é a chave para evitar dupla contagem." },
+      { instruction: "Calcule 'só futebol'", explanation: "18 praticam futebol no total. Retiramos os 5 que praticam ambos: 18 − 5 = 13 só futebol.", action: { type: "fill", region: "only_A", value: 13 }, tip: null },
+      { instruction: "Calcule 'só natação'", explanation: "12 praticam natação no total. Retiramos os 5 que praticam ambos: 12 − 5 = 7 só natação.", action: { type: "fill", region: "only_B", value: 7 }, tip: null },
+      { instruction: "Calcule 'nenhum'", explanation: "Total da turma: 30. Praticam algum esporte: 13 + 5 + 7 = 25. Nenhum: 30 − 25 = 5.", action: { type: "fill", region: "neither", value: 5 }, tip: "Fórmula: Nenhum = Total − |A∪B| = Total − (|A| + |B| − |A∩B|)." },
+    ],
+    answer: "5 alunos não praticam nenhum dos dois esportes",
+    summary: "Princípio da inclusão-exclusão: |A∪B| = |A| + |B| − |A∩B|. Subtraindo da turma total obtemos os que não pertencem a nenhum conjunto.",
+  },
+
+  {
+    id: 36,
+    title: "Idiomas no Curso",
+    type: "venn",
+    difficulty: "médio",
+    icon: "🌍",
+    description: "Alunos que falam inglês, espanhol ou ambos.",
+    statement: `<p>Em um curso de idiomas com 40 alunos:</p>
+      <ul>
+        <li><span class="clue">25 falam inglês</span></li>
+        <li><span class="clue">20 falam espanhol</span></li>
+        <li><span class="clue">8 não falam nenhum dos dois</span></li>
+      </ul>
+      <p>Quantos alunos falam ambos os idiomas?</p>`,
+    initialState: {
+      labelA: "Inglês",
+      labelB: "Espanhol",
+      only_A: null,
+      both: null,
+      only_B: null,
+      neither: null,
+      highlighted: [],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Preencha 'nenhum'", explanation: "Sabemos que 8 alunos não falam nenhum idioma.", action: { type: "fill", region: "neither", value: 8 }, tip: "Comece pelo dado direto." },
+      { instruction: "Calcule quem fala ao menos um idioma", explanation: "40 − 8 = 32 alunos falam ao menos um idioma. Isso é |A∪B| = 32.", action: { type: "info", text: "|Inglês ∪ Espanhol| = 40 − 8 = 32 alunos" }, tip: null },
+      { instruction: "Aplique inclusão-exclusão", explanation: "|A∪B| = |A| + |B| − |A∩B|. Portanto: 32 = 25 + 20 − |ambos|. Logo |ambos| = 45 − 32 = 13.", action: { type: "fill", region: "both", value: 13 }, tip: "Isole |A∩B|: |A∩B| = |A| + |B| − |A∪B|." },
+      { instruction: "Calcule 'só inglês'", explanation: "25 − 13 = 12 falam só inglês.", action: { type: "fill", region: "only_A", value: 12 }, tip: null },
+      { instruction: "Calcule 'só espanhol'", explanation: "20 − 13 = 7 falam só espanhol. Confirmação: 12 + 13 + 7 + 8 = 40 ✓", action: { type: "fill", region: "only_B", value: 7 }, tip: null },
+    ],
+    answer: "13 alunos falam ambos os idiomas",
+    summary: "Quando conhecemos a união e os individuais, isolamos a interseção: |A∩B| = |A| + |B| − |A∪B|.",
+  },
+
+  {
+    id: 37,
+    title: "Aprovação em Provas",
+    type: "venn",
+    difficulty: "médio",
+    icon: "📝",
+    description: "Candidatos aprovados em prova escrita, oral ou ambas.",
+    statement: `<p>Em um concurso com 50 candidatos:</p>
+      <ul>
+        <li><span class="clue">30 foram aprovados na prova escrita</span></li>
+        <li><span class="clue">24 foram aprovados na prova oral</span></li>
+        <li><span class="clue">10 foram aprovados em ambas</span></li>
+      </ul>
+      <p>Quantos candidatos foram aprovados em apenas uma das provas?</p>`,
+    initialState: {
+      labelA: "Escrita",
+      labelB: "Oral",
+      only_A: null,
+      both: null,
+      only_B: null,
+      neither: null,
+      highlighted: [],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Preencha a interseção", explanation: "10 candidatos passaram nas duas provas (interseção).", action: { type: "fill", region: "both", value: 10 }, tip: null },
+      { instruction: "Calcule 'só escrita'", explanation: "30 passaram na escrita. Dos quais 10 passaram nas duas. Então 30 − 10 = 20 passaram SÓ na escrita.", action: { type: "fill", region: "only_A", value: 20 }, tip: null },
+      { instruction: "Calcule 'só oral'", explanation: "24 passaram na oral. Dos quais 10 passaram nas duas. Então 24 − 10 = 14 passaram SÓ na oral.", action: { type: "fill", region: "only_B", value: 14 }, tip: null },
+      { instruction: "Calcule 'nenhuma'", explanation: "Total aprovados em ao menos uma: 20 + 10 + 14 = 44. Reprovados em ambas: 50 − 44 = 6.", action: { type: "fill", region: "neither", value: 6 }, tip: null },
+      { instruction: "Responda a pergunta", explanation: "Aprovados em exatamente UMA prova: 'só escrita' + 'só oral' = 20 + 14 = 34.", action: { type: "info", text: "Aprovados em exatamente uma prova: 20 + 14 = 34 candidatos" }, tip: "'Apenas uma' = (só A) + (só B), sem contar a interseção." },
+    ],
+    answer: "34 candidatos foram aprovados em apenas uma das provas",
+    summary: "'Apenas uma' exclui a interseção. Some as regiões exclusivas de A e B separadamente, sem contar os que passaram nas duas.",
+  },
+
+  // ─── Verdadeiro / Falso ───────────────────────────────────────────────────
+
+  {
+    id: 38,
+    title: "Ana e Beto Mentem?",
+    type: "truthfalse",
+    difficulty: "fácil",
+    icon: "🎭",
+    description: "Determine quem fala a verdade e quem mente.",
+    statement: `<p>Ana e Beto fazem as seguintes afirmações:</p>
+      <ul>
+        <li><span class="clue">Ana diz: "Beto é mentiroso."</span></li>
+        <li><span class="clue">Beto diz: "Ana é mentirosa."</span></li>
+      </ul>
+      <p>Sabendo que há exatamente um mentiroso entre eles, quem mente?</p>`,
+    initialState: {
+      people: [
+        { name: "Ana",  statement: "Beto é mentiroso.", role: null, active: false },
+        { name: "Beto", statement: "Ana é mentirosa.",  role: null, active: false },
+      ],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Analise a afirmação de Ana", explanation: "Ana diz que Beto mente. Se Ana fala a verdade → Beto é mentiroso. Se Ana mente → Beto é verdadeiro.", action: { type: "activate", name: "Ana" }, tip: "Teste cada hipótese: 'E se esta pessoa falar a verdade?'" },
+      { instruction: "Analise a afirmação de Beto", explanation: "Beto diz que Ana mente. Se Beto fala a verdade → Ana é mentirosa. Se Beto mente → Ana é verdadeira.", action: { type: "activate", name: "Beto" }, tip: null },
+      { instruction: "Teste: 'Ana fala a verdade'", explanation: "Se Ana é verdadeira → Beto mente (pela afirmação de Ana) → Beto mente → afirmação de Beto é falsa → Ana é verdadeira. CONSISTENTE!", action: { type: "info", text: "Hipótese: Ana=verdadeira → Beto=mentiroso → consistente ✓" }, tip: null },
+      { instruction: "Revele os papéis", explanation: "Ana fala a verdade e Beto é o mentiroso. Exatamente 1 mentiroso, como exigido.", action: { type: "reveal", name: "Ana",  role: "truth" }, tip: null },
+      { instruction: "Confirme o resultado", explanation: "Beto mente quando diz 'Ana é mentirosa', pois Ana de fato fala a verdade.", action: { type: "reveal", name: "Beto", role: "liar" }, tip: null },
+    ],
+    answer: "Beto é o mentiroso; Ana fala a verdade.",
+    summary: "Em puzzles de verdadeiro/falso, teste cada hipótese e verifique a consistência. A hipótese que não gera contradição é a correta.",
+  },
+
+  {
+    id: 39,
+    title: "Três Suspeitos",
+    type: "truthfalse",
+    difficulty: "médio",
+    icon: "🔍",
+    description: "Entre Carlos, Denise e Eduardo, apenas um fala a verdade.",
+    statement: `<p>Carlos, Denise e Eduardo são interrogados. Apenas UM deles fala a verdade.</p>
+      <ul>
+        <li><span class="clue">Carlos diz: "Eu não fui."</span></li>
+        <li><span class="clue">Denise diz: "Carlos foi."</span></li>
+        <li><span class="clue">Eduardo diz: "Eu fui."</span></li>
+      </ul>
+      <p>Quem fala a verdade? Quem foi o culpado?</p>`,
+    initialState: {
+      people: [
+        { name: "Carlos",  statement: "Eu não fui.", role: null, active: false },
+        { name: "Denise",  statement: "Carlos foi.", role: null, active: false },
+        { name: "Eduardo", statement: "Eu fui.",     role: null, active: false },
+      ],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Ative Carlos", explanation: "Carlos diz 'Eu não fui'. Se verdade → Carlos é inocente. Se mente → Carlos é culpado.", action: { type: "activate", name: "Carlos" }, tip: "Avalie cada afirmação isoladamente primeiro." },
+      { instruction: "Ative Denise", explanation: "Denise diz 'Carlos foi'. Contradiz Carlos diretamente — um deles necessariamente mente.", action: { type: "activate", name: "Denise" }, tip: "Carlos e Denise fazem afirmações opostas sobre o mesmo fato." },
+      { instruction: "Ative Eduardo", explanation: "Eduardo diz 'Eu fui'. Se verdade → Eduardo é culpado.", action: { type: "activate", name: "Eduardo" }, tip: null },
+      { instruction: "Teste: Eduardo fala a verdade", explanation: "Se Eduardo (verdadeiro) fez → Eduardo culpado → Carlos inocente → Carlos verdadeiro também. Mas só 1 pode ser verdadeiro. Contradição!", action: { type: "info", text: "Eduardo verdadeiro → Carlos também verdadeiro → contradição (2 verdadeiros) ✗" }, tip: null },
+      { instruction: "Teste: Carlos fala a verdade", explanation: "Carlos inocente (verdadeiro) → Denise mente → Carlos NÃO foi ✓ → Eduardo mente → Eduardo NÃO foi. Mas então quem foi? Denise! Tudo consistente.", action: { type: "info", text: "Carlos verdadeiro → Denise mente, Eduardo mente → Denise é culpada ✓" }, tip: null },
+      { instruction: "Revele: Carlos é verdadeiro", explanation: "Carlos fala a verdade: ele não foi.", action: { type: "reveal", name: "Carlos", role: "truth" }, tip: null },
+      { instruction: "Revele: Denise e Eduardo mentem", explanation: "Denise mente (Carlos não foi, não Denise). Eduardo mente (Eduardo não foi). Culpada: Denise.", action: { type: "reveal", name: "Denise",  role: "liar" }, tip: null },
+      { instruction: "Confirme Eduardo", explanation: "Eduardo diz 'Eu fui', mas mente — ele é inocente. A culpada é Denise.", action: { type: "reveal", name: "Eduardo", role: "liar" }, tip: null },
+    ],
+    answer: "Carlos fala a verdade; Denise é a culpada.",
+    summary: "Teste hipóteses sistematicamente. A hipótese 'Carlos=verdadeiro' é a única que não gera contradição com a restrição de exatamente 1 verdadeiro.",
+  },
+
+  {
+    id: 40,
+    title: "Quem Roubou o Troféu?",
+    type: "truthfalse",
+    difficulty: "médio",
+    icon: "🏆",
+    description: "Fátima, Gustavo e Helo: dois falam a verdade, um mente.",
+    statement: `<p>O troféu da escola sumiu. Há três suspeitos, e <strong>dois deles falam a verdade</strong>.</p>
+      <ul>
+        <li><span class="clue">Fátima diz: "Gustavo pegou o troféu."</span></li>
+        <li><span class="clue">Gustavo diz: "Não fui eu, foi Helo."</span></li>
+        <li><span class="clue">Helo diz: "Gustavo está mentindo."</span></li>
+      </ul>
+      <p>Quem roubou o troféu?</p>`,
+    initialState: {
+      people: [
+        { name: "Fátima",  statement: "Gustavo pegou o troféu.", role: null, active: false },
+        { name: "Gustavo", statement: "Não fui eu, foi Helo.",    role: null, active: false },
+        { name: "Helo",    statement: "Gustavo está mentindo.",   role: null, active: false },
+      ],
+      infos: [],
+    },
+    steps: [
+      { instruction: "Ative Fátima", explanation: "Fátima acusa Gustavo. Se verdadeira → Gustavo é o culpado.", action: { type: "activate", name: "Fátima" }, tip: "2 verdadeiros, 1 mentiroso. Se 2 concordam, provavelmente estão certos." },
+      { instruction: "Ative Gustavo", explanation: "Gustavo nega e acusa Helo. Se verdadeiro → Helo culpado. Mas contradiz Fátima — um deles mente.", action: { type: "activate", name: "Gustavo" }, tip: null },
+      { instruction: "Ative Helo", explanation: "Helo diz que Gustavo mente. Se verdadeiro → Gustavo é mentiroso. Helo concorda com Fátima indiretamente.", action: { type: "activate", name: "Helo" }, tip: null },
+      { instruction: "Teste: Gustavo é mentiroso", explanation: "Fátima (verdadeira): Gustavo culpado. Helo (verdadeiro): Gustavo mente. Gustavo (mentiroso): 'Não fui, foi Helo' é mentira → Gustavo FOI e não foi Helo. Consistente! 2 verdadeiros ✓", action: { type: "info", text: "Fátima e Helo verdadeiros, Gustavo mentiroso → Gustavo é o culpado ✓" }, tip: null },
+      { instruction: "Revele Fátima", explanation: "Fátima fala a verdade: Gustavo pegou o troféu.", action: { type: "reveal", name: "Fátima",  role: "truth" }, tip: null },
+      { instruction: "Revele Gustavo", explanation: "Gustavo mente: ele foi o culpado, não Helo.", action: { type: "reveal", name: "Gustavo", role: "liar" }, tip: null },
+      { instruction: "Revele Helo", explanation: "Helo fala a verdade: Gustavo de fato estava mentindo.", action: { type: "reveal", name: "Helo",    role: "truth" }, tip: null },
+    ],
+    answer: "Gustavo roubou o troféu (ele é o único mentiroso).",
+    summary: "Com 2 verdadeiros e 1 mentiroso, procure quem contradiz os outros dois. Fátima e Helo apontam para Gustavo como culpado/mentiroso — consistência confirma.",
+  },
 ];
 
 // Export for use in other modules

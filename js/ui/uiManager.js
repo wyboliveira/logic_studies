@@ -38,9 +38,12 @@ class UIManager {
         }
 
         this._visualizers = {
-            table:    tableVisualizer,
-            sequence: sequenceVisualizer,
-            order:    listVisualizer,
+            table:       tableVisualizer,
+            sequence:    sequenceVisualizer,
+            order:       listVisualizer,
+            proposition: propositionVisualizer,
+            venn:        vennVisualizer,
+            truthfalse:  truthVisualizer,
         };
     }
 
@@ -162,10 +165,13 @@ class UIManager {
 
     getTypeLabel(type) {
         switch (type) {
-            case 'table':    return 'Tabela Lógica';
-            case 'sequence': return 'Sequência';
-            case 'order':    return 'Ordem/Posição';
-            default:         return type;
+            case 'table':       return 'Tabela Lógica';
+            case 'sequence':    return 'Sequência';
+            case 'order':       return 'Ordem/Posição';
+            case 'proposition': return 'Proposição Lógica';
+            case 'venn':        return 'Diagrama de Venn';
+            case 'truthfalse':  return 'Verdadeiro/Falso';
+            default:            return type;
         }
     }
 

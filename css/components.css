@@ -949,4 +949,326 @@
     .order-slot {
         max-width: 100%;
     }
+
+    .venn-diagram {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .venn-circle {
+        width: 200px;
+        height: 120px;
+    }
+
+    .venn-overlap {
+        width: 200px;
+        height: 60px;
+        margin: -30px 0;
+        border-radius: 0;
+    }
+}
+
+/* ==========================================
+   Proposition Visualizer
+   ========================================== */
+.prop-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+}
+
+.prop-statement {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    transition: all var(--transition-base);
+}
+
+.prop-statement.active {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.prop-premise {
+    border-left: 3px solid var(--color-highlight);
+}
+
+.prop-conclusion {
+    border-left: 3px solid var(--color-accent);
+    background: rgba(139, 92, 246, 0.08);
+}
+
+.prop-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: var(--space-1);
+}
+
+.prop-text {
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+}
+
+.prop-valid-badge,
+.prop-invalid-badge {
+    display: inline-block;
+    margin-top: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.prop-valid-badge {
+    background: var(--color-confirmed-bg);
+    color: var(--color-confirmed);
+    border: 1px solid var(--color-confirmed);
+}
+
+.prop-invalid-badge {
+    background: var(--color-eliminated-bg);
+    color: var(--color-eliminated);
+    border: 1px solid var(--color-eliminated);
+}
+
+.prop-connector,
+.prop-therefore {
+    text-align: center;
+    font-size: var(--font-size-xl);
+    color: var(--text-muted);
+    line-height: 1;
+    padding: var(--space-1) 0;
+}
+
+.prop-therefore {
+    font-size: var(--font-size-2xl);
+    color: var(--color-accent);
+}
+
+.prop-infos {
+    margin-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.prop-info-item {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+}
+
+/* ==========================================
+   Venn Diagram Visualizer
+   ========================================== */
+.venn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-6);
+}
+
+.venn-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 160px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.venn-circle {
+    position: absolute;
+    width: 180px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    transition: all var(--transition-base);
+}
+
+.venn-circle-a {
+    left: 0;
+    background: rgba(99, 102, 241, 0.18);
+    border: 2px solid var(--color-primary);
+}
+
+.venn-circle-b {
+    right: 0;
+    background: rgba(139, 92, 246, 0.18);
+    border: 2px solid var(--color-accent);
+}
+
+.venn-overlap {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 120px;
+    background: rgba(200, 180, 255, 0.18);
+    border-top: 2px dashed rgba(200, 180, 255, 0.5);
+    border-bottom: 2px dashed rgba(200, 180, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    z-index: 1;
+}
+
+.venn-circle.venn-highlighted,
+.venn-overlap.venn-highlighted,
+.venn-neither.venn-highlighted {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: #fbbf24;
+}
+
+.venn-label-inside {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.venn-region-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 2ch;
+    text-align: center;
+}
+
+.venn-neither {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+}
+
+.venn-neither-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.venn-infos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+    max-width: 420px;
+}
+
+.venn-info-item {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+}
+
+/* ==========================================
+   Truth/False Visualizer
+   ========================================== */
+.truth-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+}
+
+.truth-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    transition: all var(--transition-base);
+}
+
+.truth-card.active {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.truth-role-truth {
+    border-left: 3px solid var(--color-confirmed);
+    background: var(--color-confirmed-bg);
+}
+
+.truth-role-liar {
+    border-left: 3px solid var(--color-eliminated);
+    background: var(--color-eliminated-bg);
+}
+
+.truth-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+}
+
+.truth-name {
+    font-weight: 700;
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+}
+
+.truth-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+}
+
+.truth-badge-truth {
+    background: var(--color-confirmed-bg);
+    color: var(--color-confirmed);
+    border: 1px solid var(--color-confirmed);
+}
+
+.truth-badge-liar {
+    background: var(--color-eliminated-bg);
+    color: var(--color-eliminated);
+    border: 1px solid var(--color-eliminated);
+}
+
+.truth-statement {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.truth-infos {
+    margin-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.truth-info-item {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
 }
