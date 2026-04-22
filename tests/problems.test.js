@@ -1,14 +1,14 @@
 /**
- * Problem data validation — verifies that each of the 10 problems reaches
- * its correct final state when solved step-by-step via showSolution().
+ * Problem data validation — verifies that each problem reaches its correct
+ * final state when solved step-by-step via showSolution().
  *
  * Strategy:
- *  - For table problems: every row must have exactly one '✓' cell, in the
- *    position that matches the stated answer.
- *  - For sequence problems: the last element must be revealed and match
- *    the numeric answer.
- *  - For order problems: all slots must be filled; each slot must match the
- *    stated answer.
+ *  - table:       every row and column must have exactly one '✓' (bijection).
+ *  - sequence:    last element must be revealed and match the numeric answer.
+ *  - order:       all slots filled, no nulls.
+ *  - proposition: all statements active; conclusion has valid !== null.
+ *  - venn:        all four regions (only_A, both, only_B, neither) are numbers.
+ *  - truthfalse:  all people have role !== null.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -163,5 +163,123 @@ describe('Problem 10 — Jantar dos cinco amigos (5×5)', () => {
         expect(cells[2][2]).toBe('✓'); // Carlos  — Leste
         expect(cells[3][1]).toBe('✓'); // Diana   — Sul
         expect(cells[4][4]).toBe('✓'); // Eduardo — Centro
+    });
+});
+
+// ─── Proposition problems ────────────────────────────────────────────────────
+
+describe('Proposition problems — all statements activated, conclusion validated', () => {
+    const propProblems = PROBLEMS.filter(p => p.type === 'proposition');
+
+    propProblems.forEach(problem => {
+        it(`problem ${problem.id}: "${problem.title}"`, () => {
+            const state = solvedState(problem.id);
+
+            state.statements.forEach((s, i) => {
+                if (s.type === 'conclusion') {
+                    expect(s.valid, `conclusion should have valid !== null`).not.toBeNull();
+                }
+            });
+        });
+    });
+});
+
+describe('Problem 31 — Modus Ponens (valid)', () => {
+    it('conclusion is valid', () => {
+        const state = solvedState(31);
+        const conclusion = state.statements.find(s => s.type === 'conclusion');
+        expect(conclusion.valid).toBe(true);
+    });
+});
+
+describe('Problem 34 — Falácia do Consequente (invalid)', () => {
+    it('conclusion is invalid', () => {
+        const state = solvedState(34);
+        const conclusion = state.statements.find(s => s.type === 'conclusion');
+        expect(conclusion.valid).toBe(false);
+    });
+});
+
+// ─── Venn diagram problems ───────────────────────────────────────────────────
+
+describe('Venn problems — all four regions filled with numbers', () => {
+    const vennProblems = PROBLEMS.filter(p => p.type === 'venn');
+
+    vennProblems.forEach(problem => {
+        it(`problem ${problem.id}: "${problem.title}"`, () => {
+            const state = solvedState(problem.id);
+            expect(state.only_A,  'only_A should be a number').not.toBeNull();
+            expect(state.both,    'both should be a number').not.toBeNull();
+            expect(state.only_B,  'only_B should be a number').not.toBeNull();
+            expect(state.neither, 'neither should be a number').not.toBeNull();
+        });
+    });
+});
+
+describe('Problem 35 — Esportes (neither=5)', () => {
+    it('confirms only_A=13, both=5, only_B=7, neither=5', () => {
+        const s = solvedState(35);
+        expect(s.only_A).toBe(13);
+        expect(s.both).toBe(5);
+        expect(s.only_B).toBe(7);
+        expect(s.neither).toBe(5);
+    });
+});
+
+describe('Problem 36 — Idiomas (both=13)', () => {
+    it('confirms both=13', () => {
+        const s = solvedState(36);
+        expect(s.both).toBe(13);
+        expect(s.neither).toBe(8);
+    });
+});
+
+describe('Problem 37 — Aprovação em provas (only_A+only_B=34)', () => {
+    it('confirms only_A=20, only_B=14', () => {
+        const s = solvedState(37);
+        expect(s.only_A).toBe(20);
+        expect(s.only_B).toBe(14);
+        expect(s.both).toBe(10);
+    });
+});
+
+// ─── Truth/False problems ─────────────────────────────────────────────────────
+
+describe('Truth/False problems — all people have role revealed', () => {
+    const tfProblems = PROBLEMS.filter(p => p.type === 'truthfalse');
+
+    tfProblems.forEach(problem => {
+        it(`problem ${problem.id}: "${problem.title}"`, () => {
+            const state = solvedState(problem.id);
+            state.people.forEach(p => {
+                expect(p.role, `${p.name} should have a role`).not.toBeNull();
+            });
+        });
+    });
+});
+
+describe('Problem 38 — Ana e Beto: Beto é mentiroso', () => {
+    it('Ana=truth, Beto=liar', () => {
+        const s = solvedState(38);
+        expect(s.people.find(p => p.name === 'Ana').role).toBe('truth');
+        expect(s.people.find(p => p.name === 'Beto').role).toBe('liar');
+    });
+});
+
+describe('Problem 39 — Três Suspeitos: Carlos verdadeiro, Denise culpada', () => {
+    it('Carlos=truth, Denise=liar, Eduardo=liar', () => {
+        const s = solvedState(39);
+        expect(s.people.find(p => p.name === 'Carlos').role).toBe('truth');
+        expect(s.people.find(p => p.name === 'Denise').role).toBe('liar');
+        expect(s.people.find(p => p.name === 'Eduardo').role).toBe('liar');
+    });
+});
+
+describe('Problem 40 — Quem roubou o troféu: Gustavo=liar', () => {
+    it('Fátima=truth, Gustavo=liar, Helo=truth', () => {
+        const s = solvedState(40);
+        expect(s.people.find(p => p.name === 'Fátima').role).toBe('truth');
+        expect(s.people.find(p => p.name === 'Gustavo').role).toBe('liar');
+        expect(s.people.find(p => p.name === 'Helo').role).toBe('truth');
     });
 });
