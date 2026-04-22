@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toast.init();
     uiManager.init();
     stepController.init();
+    feedbackModal.init();
 
     uiManager.renderProblemCards(PROBLEMS, handleProblemSelect);
     stepController.setOnStepChange(handleStepChange);
@@ -22,7 +23,7 @@ function handleProblemSelect(problemId) {
     }
 
     const problem = problemEngine.getProblem();
-    const state = problemEngine.getState();
+    const state   = problemEngine.getState();
 
     uiManager.showProblemScreen();
     uiManager.displayProblem(problem);
@@ -31,10 +32,10 @@ function handleProblemSelect(problemId) {
 }
 
 function handleStepChange(action, stepData, isComplete) {
-    const problem = problemEngine.getProblem();
-    const state = problemEngine.getState();
+    const problem     = problemEngine.getProblem();
+    const state       = problemEngine.getState();
     const currentStep = problemEngine.getCurrentStep();
-    const totalSteps = problemEngine.getTotalSteps();
+    const totalSteps  = problemEngine.getTotalSteps();
 
     stepController.updateDisplay(currentStep, totalSteps);
     uiManager.renderVisualization(problem.type, state);
@@ -51,7 +52,7 @@ function handleStepChange(action, stepData, isComplete) {
         uiManager.hideSummary();
     } else if (action === 'solution') {
         const lastStep = problem.steps[totalSteps - 1];
-        uiManager.updateExplanation(lastStep);
+        uiManager.updateExplanation(lastStep, { revealAll: true });
         uiManager.animateSolutionReveal(problem.type, state);
         uiManager.showSummary(problemEngine.getAnswer(), problemEngine.getSummary());
     } else if (stepData) {
@@ -62,7 +63,6 @@ function handleStepChange(action, stepData, isComplete) {
         uiManager.showSummary(problemEngine.getAnswer(), problemEngine.getSummary());
     }
 
-    // Persist progress whenever the problem reaches its final state
     if (isComplete) {
         progressManager.markCompleted(problem.id);
     }
@@ -88,6 +88,10 @@ document.addEventListener('keydown', (e) => {
         case 'r':
         case 'R':
             document.getElementById('resetBtn')?.click();
+            break;
+        case 'h':
+        case 'H':
+            document.getElementById('hintBtn')?.click();
             break;
     }
 });

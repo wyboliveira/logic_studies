@@ -3,6 +3,62 @@
    ========================================== */
 
 /* ==========================================
+   Filter Bar
+   ========================================== */
+.filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.filter-chip {
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--text-primary);
+}
+
+.filter-chip.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.filter-count {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-2);
+    min-height: 1.2em;
+}
+
+.filter-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-muted);
+    padding: var(--space-10) 0;
+    font-size: var(--font-size-base);
+}
+
+/* ==========================================
    Problem Cards (Selection Screen)
    ========================================== */
 .problem-cards {
@@ -272,12 +328,14 @@
     align-items: center;
     gap: var(--space-4);
     margin-bottom: var(--space-4);
+    flex-wrap: wrap;
 }
 
 .problem-title {
     font-size: var(--font-size-xl);
     font-weight: 600;
     color: var(--text-primary);
+    flex: 1;
 }
 
 .problem-statement {
@@ -658,12 +716,9 @@
 .explanation-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
     margin-bottom: var(--space-4);
-}
-
-.explanation-icon {
-    font-size: var(--font-size-xl);
 }
 
 .explanation-header h3 {
@@ -672,8 +727,36 @@
     color: var(--text-primary);
 }
 
+/* Hint button — sits in the header row */
+.hint-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--color-accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-accent);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+
+.hint-btn:hover:not(:disabled) {
+    background: rgba(139, 92, 246, 0.12);
+}
+
+.hint-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+    border-color: var(--border-default);
+    color: var(--text-muted);
+}
+
 .explanation-content {
-    padding-left: var(--space-8);
+    padding-left: 0;
 }
 
 .instruction {
@@ -684,9 +767,14 @@
 }
 
 .explanation {
+    display: none;
     color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: var(--space-4);
+}
+
+.explanation.visible {
+    display: block;
 }
 
 .tip {
@@ -950,22 +1038,10 @@
         max-width: 100%;
     }
 
-    .venn-diagram {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .venn-circle {
-        width: 200px;
-        height: 120px;
-    }
-
-    .venn-overlap {
-        width: 200px;
-        height: 60px;
-        margin: -30px 0;
-        border-radius: 0;
-    }
+    /* Venn: shrink stage height on narrow screens; circles stay %-based */
+    .venn-stage       { height: 180px; }
+    .venn-circle-bg   { height: 128px; top: 26px; }
+    .venn-val         { top: 90px; font-size: var(--font-size-xl); }
 }
 
 /* ==========================================
@@ -1075,83 +1151,93 @@
     flex-direction: column;
     align-items: center;
     gap: var(--space-5);
-    padding: var(--space-6);
+    padding: var(--space-6) var(--space-4);
 }
 
-.venn-diagram {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/*
+ * Stage: percentage-based so circles and values stay proportional at any width.
+ *
+ * Layout math (circles are 62% wide each):
+ *   Circle A : 0%  → 62%   — center at 31%
+ *   Circle B : 38% → 100%  — center at 69%
+ *   Overlap  : 38% → 62%   — center at 50%
+ *   Excl. A  : 0%  → 38%   — value target: ~19%
+ *   Excl. B  : 62% → 100%  — value target: ~81%
+ */
+.venn-stage {
     position: relative;
-    height: 160px;
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
+    /* height drives the ellipse aspect ratio; values are vertically centered */
+    height: 220px;
 }
 
-.venn-circle {
+/* Ellipse backgrounds — purely visual, no content inside */
+.venn-circle-bg {
     position: absolute;
-    width: 180px;
-    height: 140px;
+    width: 62%;
+    /* height expressed as % of the stage height so the ellipse stays round-ish */
+    height: 160px;
+    top: 30px;
     border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-1);
-    transition: all var(--transition-base);
+    transition: background var(--transition-base), border-color var(--transition-base);
+    pointer-events: none;
 }
 
-.venn-circle-a {
+.venn-bg-a {
     left: 0;
-    background: rgba(99, 102, 241, 0.18);
+    background: rgba(99, 102, 241, 0.15);
     border: 2px solid var(--color-primary);
 }
 
-.venn-circle-b {
+.venn-bg-b {
     right: 0;
-    background: rgba(139, 92, 246, 0.18);
+    background: rgba(139, 92, 246, 0.15);
     border: 2px solid var(--color-accent);
 }
 
-.venn-overlap {
+/* Highlight state */
+.venn-bg-a.venn-hl     { background: rgba(251, 191, 36, 0.18); border-color: #fbbf24; }
+.venn-bg-b.venn-hl     { background: rgba(251, 191, 36, 0.18); border-color: #fbbf24; }
+.venn-neither.venn-hl  { background: rgba(251, 191, 36, 0.15); border-color: #fbbf24; }
+
+/* Labels sit at the top of each circle's outer edge — angled away from center */
+.venn-label {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 120px;
-    background: rgba(200, 180, 255, 0.18);
-    border-top: 2px dashed rgba(200, 180, 255, 0.5);
-    border-bottom: 2px dashed rgba(200, 180, 255, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-base);
-    z-index: 1;
-}
-
-.venn-circle.venn-highlighted,
-.venn-overlap.venn-highlighted,
-.venn-neither.venn-highlighted {
-    background: rgba(251, 191, 36, 0.2);
-    border-color: #fbbf24;
-}
-
-.venn-label-inside {
+    top: 10px;
     font-size: var(--font-size-xs);
     font-weight: 700;
-    color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
+    color: var(--text-secondary);
+    pointer-events: none;
+    white-space: nowrap;
 }
 
-.venn-region-value {
+.venn-label-a { left: 6%; }
+.venn-label-b { right: 6%; }
+
+/* Region values — all absolutely placed, all share the same vertical midpoint */
+.venn-val {
+    position: absolute;
     font-size: var(--font-size-2xl);
     font-weight: 700;
     color: var(--text-primary);
-    min-width: 2ch;
-    text-align: center;
+    line-height: 1;
+    /* vertical center: top(30) + height(160)/2 = 110px */
+    top: 110px;
+    transform: translate(-50%, -50%);
+    transition: color var(--transition-base);
+    pointer-events: none;
 }
 
+.venn-val.venn-hl { color: #fbbf24; }
+
+.venn-val-a    { left: 19%; }   /* center of exclusive-A zone (0%–38%) */
+.venn-val-both { left: 50%; }   /* center of overlap zone (38%–62%)    */
+.venn-val-b    { left: 81%; }   /* center of exclusive-B zone (62%–100%) */
+
+/* Neither row — override absolute positioning */
 .venn-neither {
     display: flex;
     align-items: center;
@@ -1160,13 +1246,22 @@
     background: var(--bg-secondary);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 440px;
     transition: all var(--transition-base);
 }
 
 .venn-neither-label {
+    flex: 1;
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     font-weight: 500;
+}
+
+.venn-neither .venn-val {
+    position: static;
+    transform: none;
+    font-size: var(--font-size-xl);
 }
 
 .venn-infos {
@@ -1174,7 +1269,7 @@
     flex-direction: column;
     gap: var(--space-2);
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
 }
 
 .venn-info-item {
@@ -1271,4 +1366,293 @@
     padding: var(--space-2) var(--space-3);
     background: var(--bg-tertiary);
     border-radius: var(--radius-sm);
+}
+
+/* ==========================================
+   Floating Feedback Button (FAB)
+   ========================================== */
+.feedback-fab {
+    position: fixed;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    z-index: 90;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: #fff;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    font-family: var(--font-family);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.feedback-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55);
+}
+
+.feedback-fab:active {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   Feedback Modal
+   ========================================== */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    animation: fadeIn var(--transition-base);
+}
+
+.modal-backdrop.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-2xl);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    animation: slideUp var(--transition-base);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6) var(--space-6) var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.modal-close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Form inside modal */
+.modal-form {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.form-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-label-hint {
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.form-input,
+.form-textarea {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    padding: var(--space-3) var(--space-4);
+    transition: border-color var(--transition-fast);
+    width: 100%;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+/* File drop zone */
+.file-drop-zone {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--bg-tertiary);
+    border: 2px dashed var(--border-default);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.file-drop-zone:hover,
+.file-drop-zone.drag-over {
+    border-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.06);
+    color: var(--text-primary);
+}
+
+.file-drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.file-drop-icon {
+    font-size: var(--font-size-xl);
+    flex-shrink: 0;
+}
+
+/* File list */
+.file-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+}
+
+.file-icon { font-size: var(--font-size-base); flex-shrink: 0; }
+.file-name { flex: 1; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-size { color: var(--text-muted); white-space: nowrap; }
+
+.file-remove {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.file-remove:hover { color: var(--color-eliminated); }
+
+/* Modal action row */
+.modal-actions {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: flex-end;
+    padding-top: var(--space-2);
+}
+
+/* Success state */
+.modal-success {
+    padding: var(--space-10) var(--space-6);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.modal-success.hidden { display: none; }
+
+.modal-success-icon {
+    font-size: 3rem;
+    line-height: 1;
+}
+
+.modal-success h3 {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.modal-success p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-base);
+}
+
+@media (max-width: 480px) {
+    .feedback-fab {
+        bottom: var(--space-4);
+        right: var(--space-4);
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-actions .control-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }

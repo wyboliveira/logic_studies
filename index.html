@@ -39,6 +39,9 @@
             <h2 class="section-title">Escolha um problema</h2>
             <div class="progress-summary" id="progressSummary" aria-live="polite" aria-atomic="true"></div>
           </div>
+          <!-- Filters -->
+          <div class="filter-bar" id="filterBar" aria-label="Filtros"></div>
+          <p class="filter-count" id="filterCount" aria-live="polite"></p>
           <div class="problem-cards" id="problemCards" role="list">
             <!-- Cards serão inseridos via JavaScript -->
           </div>
@@ -54,9 +57,7 @@
 
             <div class="problem-header">
               <span class="difficulty-badge" id="difficultyBadge">Fácil</span>
-              <h2 class="problem-title" id="problemTitle">
-                Título do Problema
-              </h2>
+              <h2 class="problem-title" id="problemTitle">Título do Problema</h2>
             </div>
 
             <div class="problem-statement" id="problemStatement">
@@ -81,9 +82,11 @@
 
           <!-- Explanation Area -->
           <div class="explanation-container">
-            <div class="explanation-header" aria-hidden="true">
-              <span class="explanation-icon">💡</span>
-              <h3>O que estamos fazendo?</h3>
+            <div class="explanation-header">
+              <h3 aria-hidden="true">O que estamos fazendo?</h3>
+              <button class="hint-btn" id="hintBtn" disabled aria-label="Revelar dica">
+                💡 Ver Dica
+              </button>
             </div>
             <div class="explanation-content" id="explanationContent"
                  aria-live="polite" aria-atomic="true">
@@ -145,6 +148,70 @@
       </footer>
     </div>
 
+    <!-- Floating feedback button -->
+    <button class="feedback-fab" data-open-feedback aria-label="Envie sua dúvida">
+      ✉️ Dúvidas?
+    </button>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal-backdrop hidden"
+         role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle"
+         aria-hidden="true">
+      <div class="modal-card">
+        <!-- Header -->
+        <div class="modal-header">
+          <h2 class="modal-title" id="feedbackModalTitle">✉️ Envie Sua Dúvida</h2>
+          <button class="modal-close" id="feedbackCloseBtn" aria-label="Fechar">×</button>
+        </div>
+
+        <!-- Form -->
+        <form class="modal-form" id="feedbackForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="feedbackTitle">Título <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="feedbackTitle" name="title"
+                   placeholder="Ex: Dúvida sobre o Diagrama de Venn do problema 35"
+                   required maxlength="120" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="feedbackMessage">Descrição <span aria-hidden="true">*</span></label>
+            <textarea class="form-textarea" id="feedbackMessage" name="message"
+                      placeholder="Descreva sua dúvida em detalhes…"
+                      rows="5" required maxlength="2000"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="feedbackAttachments">Anexos <span class="form-label-hint">(opcional — imagens, PDF)</span></label>
+            <div class="file-drop-zone" id="fileDropZone" tabindex="0"
+                 role="button" aria-label="Clique ou arraste arquivos para anexar">
+              <input type="file" id="feedbackAttachments" name="attachments"
+                     multiple accept="image/*,.pdf,.txt" tabindex="-1" />
+              <span class="file-drop-icon" aria-hidden="true">📎</span>
+              <span>Arraste arquivos aqui ou <strong>clique para selecionar</strong></span>
+            </div>
+            <div class="file-list" id="fileList" aria-live="polite"></div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="control-btn secondary" id="feedbackCancelBtn">
+              Cancelar
+            </button>
+            <button type="submit" class="control-btn primary" id="feedbackSendBtn">
+              Enviar Mensagem ✉️
+            </button>
+          </div>
+        </form>
+
+        <!-- Success state (shown after send) -->
+        <div class="modal-success hidden" id="feedbackSuccess" aria-live="assertive">
+          <span class="modal-success-icon" aria-hidden="true">✅</span>
+          <h3>Mensagem enviada com sucesso!</h3>
+          <p>Obrigado pelo contato. Responderemos em breve.</p>
+          <button class="control-btn primary" id="feedbackSuccessClose">Fechar</button>
+        </div>
+      </div>
+    </div>
+
     <script src="js/progress/progressManager.js"></script>
     <!-- Anime.js — timeline-based animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" integrity="sha512-aNH2ILn88yMx7O/WUgXnW6xMYbM2oMBR4Dlvl43Nd3R6DxktAaEBKFpbxPBuC4fjkS6Kfb/gKHTUHKbDmwPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -159,6 +226,7 @@
     <script src="js/ui/toast.js"></script>
     <script src="js/ui/stepController.js"></script>
     <script src="js/ui/uiManager.js"></script>
+    <script src="js/ui/feedbackModal.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

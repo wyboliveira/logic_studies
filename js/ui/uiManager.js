@@ -9,8 +9,13 @@ class UIManager {
         this.elements = {};
         this._problems = null;
         this._onSelect = null;
-        // Visualizer registry — populated in init() after all globals are defined
         this._visualizers = {};
+        // Filter state
+        this._filterType = 'all';
+        this._filterDiff = 'all';
+        // Hint state: 0=hidden, 1=explanation shown, 2=tip shown
+        this._hintLevel = 0;
+        this._currentStepData = null;
     }
 
     init() {
@@ -20,6 +25,7 @@ class UIManager {
         this.elements = {
             problemCards:      document.getElementById('problemCards'),
             progressSummary:   document.getElementById('progressSummary'),
+            filterBar:         document.getElementById('filterBar'),
             problemTitle:      document.getElementById('problemTitle'),
             problemStatement:  document.getElementById('problemStatement'),
             difficultyBadge:   document.getElementById('difficultyBadge'),
@@ -27,6 +33,7 @@ class UIManager {
             instruction:       document.getElementById('instruction'),
             explanation:       document.getElementById('explanation'),
             tip:               document.getElementById('tip'),
+            hintBtn:           document.getElementById('hintBtn'),
             summaryContainer:  document.getElementById('summaryContainer'),
             answerText:        document.getElementById('answerText'),
             reasoningText:     document.getElementById('reasoningText'),
@@ -35,6 +42,9 @@ class UIManager {
 
         if (this.elements.backBtn) {
             this.elements.backBtn.addEventListener('click', () => this.showListScreen());
+        }
+        if (this.elements.hintBtn) {
+            this.elements.hintBtn.addEventListener('click', () => this._revealNextHint());
         }
 
         this._visualizers = {
@@ -51,10 +61,73 @@ class UIManager {
         this._visualizers[type] = visualizer;
     }
 
+    // ── Filters ────────────────────────────────────────────────────────────────
+
+    renderFilterBar(problems) {
+        const bar = this.elements.filterBar;
+        if (!bar) return;
+
+        const types = ['all', ...new Set(problems.map(p => p.type))];
+        const diffs = ['all', 'fácil', 'médio', 'difícil'];
+
+        const typeLabel = t => t === 'all' ? 'Todos os tipos' : this.getTypeLabel(t);
+        const diffLabel = d => d === 'all' ? 'Todas' : d.charAt(0).toUpperCase() + d.slice(1);
+
+        bar.innerHTML = `
+            <div class="filter-row" role="group" aria-label="Filtrar por tipo">
+                ${types.map(t => `
+                    <button class="filter-chip${this._filterType === t ? ' active' : ''}"
+                            data-filter-type="${t}"
+                            aria-pressed="${this._filterType === t}">
+                        ${typeLabel(t)}
+                    </button>`).join('')}
+            </div>
+            <div class="filter-row" role="group" aria-label="Filtrar por dificuldade">
+                ${diffs.map(d => `
+                    <button class="filter-chip${this._filterDiff === d ? ' active' : ''}"
+                            data-filter-diff="${d}"
+                            aria-pressed="${this._filterDiff === d}">
+                        ${diffLabel(d)}
+                    </button>`).join('')}
+            </div>
+        `;
+
+        bar.querySelectorAll('[data-filter-type]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this._filterType = btn.dataset.filterType;
+                this._applyFilters();
+            });
+        });
+        bar.querySelectorAll('[data-filter-diff]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this._filterDiff = btn.dataset.filterDiff;
+                this._applyFilters();
+            });
+        });
+    }
+
+    _applyFilters() {
+        if (!this._problems) return;
+        const filtered = this._problems.filter(p =>
+            (this._filterType === 'all' || p.type === this._filterType) &&
+            (this._filterDiff === 'all' || p.difficulty === this._filterDiff)
+        );
+        this.renderFilterBar(this._problems);
+        this._renderCards(filtered);
+        this._updateFilterCount(filtered.length, this._problems.length);
+    }
+
+    _updateFilterCount(shown, total) {
+        const el = document.getElementById('filterCount');
+        if (!el) return;
+        el.textContent = shown === total ? '' : `${shown} de ${total} problemas`;
+    }
+
+    // ── Screens ────────────────────────────────────────────────────────────────
+
     showListScreen() {
         this.screens.list.classList.add('active');
         this.screens.problem.classList.remove('active');
-        // Re-render cards to reflect any newly completed problems
         if (this._problems && this._onSelect) {
             this.renderProblemCards(this._problems, this._onSelect);
         }
@@ -67,11 +140,22 @@ class UIManager {
 
     renderProblemCards(problems, onSelect) {
         if (!this.elements.problemCards) return;
-
         this._problems = problems;
         this._onSelect = onSelect;
+        this.renderFilterBar(problems);
+        this._renderCards(problems);
+        this.updateProgressSummary(problems.length);
+    }
 
+    _renderCards(problems) {
+        if (!this.elements.problemCards) return;
         const completedIds = progressManager.getCompletedIds();
+
+        if (problems.length === 0) {
+            this.elements.problemCards.innerHTML =
+                '<p class="filter-empty">Nenhum problema corresponde aos filtros selecionados.</p>';
+            return;
+        }
 
         let html = '';
         problems.forEach(problem => {
@@ -112,11 +196,9 @@ class UIManager {
         this.elements.problemCards.querySelectorAll('.problem-card-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const problemId = parseInt(btn.dataset.problemId);
-                if (onSelect) onSelect(problemId);
+                if (this._onSelect) this._onSelect(problemId);
             });
         });
-
-        this.updateProgressSummary(problems.length);
     }
 
     updateProgressSummary(total) {
@@ -186,27 +268,27 @@ class UIManager {
             this.elements.difficultyBadge.textContent = problem.difficulty;
             this.elements.difficultyBadge.className = `difficulty-badge ${this.getDifficultyClass(problem.difficulty)}`;
         }
-
         this.hideSummary();
-        this.updateExplanation({
-            instruction: "Clique em 'Próximo Passo' para começar!",
-            explanation: "",
-            tip: null
-        });
+        this.updateExplanation(null);
     }
 
-    updateExplanation(stepData) {
+    updateExplanation(stepData, { revealAll = false } = {}) {
+        this._hintLevel = revealAll ? 2 : 0;
+        this._currentStepData = stepData;
+
         if (!stepData) {
             if (this.elements.instruction) {
                 this.elements.instruction.textContent = "Clique em 'Próximo Passo' para começar!";
             }
             if (this.elements.explanation) {
                 this.elements.explanation.textContent = "";
+                this.elements.explanation.classList.remove('visible');
             }
             if (this.elements.tip) {
                 this.elements.tip.textContent = "";
                 this.elements.tip.classList.remove('visible');
             }
+            this._updateHintBtn();
             return;
         }
 
@@ -217,19 +299,64 @@ class UIManager {
         }
 
         if (this.elements.explanation) {
-            this.elements.explanation.textContent = stepData.explanation || "";
+            if (revealAll || this._hintLevel >= 1) {
+                this.elements.explanation.textContent = stepData.explanation || "";
+                this.elements.explanation.classList.toggle('visible', !!stepData.explanation);
+            } else {
+                this.elements.explanation.textContent = "";
+                this.elements.explanation.classList.remove('visible');
+            }
         }
 
         if (this.elements.tip) {
-            if (stepData.tip) {
-                this.elements.tip.textContent = "💡 Dica: " + stepData.tip;
-                this.elements.tip.classList.add('visible', 'tip-animate');
-                setTimeout(() => this.elements.tip.classList.remove('tip-animate'), 400);
+            if ((revealAll || this._hintLevel >= 2) && stepData.tip) {
+                this.elements.tip.textContent = "💡 " + stepData.tip;
+                this.elements.tip.classList.add('visible');
             } else {
                 this.elements.tip.textContent = "";
                 this.elements.tip.classList.remove('visible');
             }
         }
+
+        this._updateHintBtn();
+    }
+
+    _revealNextHint() {
+        if (!this._currentStepData) return;
+        const sd = this._currentStepData;
+        if (this._hintLevel === 0 && sd.explanation) {
+            this._hintLevel = 1;
+            if (this.elements.explanation) {
+                this.elements.explanation.textContent = sd.explanation;
+                this.elements.explanation.classList.add('visible', 'explanation-animate');
+                setTimeout(() => this.elements.explanation.classList.remove('explanation-animate'), 400);
+            }
+        } else if (this._hintLevel <= 1 && sd.tip) {
+            this._hintLevel = 2;
+            if (this.elements.tip) {
+                this.elements.tip.textContent = "💡 " + sd.tip;
+                this.elements.tip.classList.add('visible', 'tip-animate');
+                setTimeout(() => this.elements.tip.classList.remove('tip-animate'), 400);
+            }
+        }
+        this._updateHintBtn();
+    }
+
+    _updateHintBtn() {
+        const btn = this.elements.hintBtn;
+        if (!btn) return;
+        const sd = this._currentStepData;
+        if (!sd) { btn.disabled = true; btn.textContent = '💡 Ver Dica'; return; }
+
+        const hasExpl  = !!sd.explanation;
+        const hasTip   = !!sd.tip;
+        const maxLevel = hasExpl && hasTip ? 2 : hasExpl || hasTip ? 1 : 0;
+
+        btn.disabled = (this._hintLevel >= maxLevel) || maxLevel === 0;
+
+        if (this._hintLevel === 0 && hasExpl) btn.textContent = '💡 Ver Dica';
+        else if (this._hintLevel === 1 && hasTip) btn.textContent = '💡 Mais uma dica';
+        else btn.textContent = '💡 Ver Dica';
     }
 
     showSummary(answer, reasoning) {
@@ -237,12 +364,8 @@ class UIManager {
             this.elements.summaryContainer.classList.remove('hidden');
             this.elements.summaryContainer.classList.add('summary-animate');
         }
-        if (this.elements.answerText) {
-            this.elements.answerText.textContent = answer;
-        }
-        if (this.elements.reasoningText) {
-            this.elements.reasoningText.textContent = reasoning;
-        }
+        if (this.elements.answerText)    this.elements.answerText.textContent    = answer;
+        if (this.elements.reasoningText) this.elements.reasoningText.textContent = reasoning;
     }
 
     hideSummary() {
