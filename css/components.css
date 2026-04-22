@@ -15,11 +15,23 @@
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    cursor: pointer;
     transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
+}
+
+/* Botão semântico que preenche todo o card — reset visual total */
+.problem-card-btn {
+    display: block;
+    width: 100%;
+    padding: var(--space-6);
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    border-radius: var(--radius-xl);
 }
 
 .problem-card::before {
@@ -32,17 +44,26 @@
     background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
     opacity: 0;
     transition: opacity var(--transition-base);
+    pointer-events: none;
 }
 
-.problem-card:hover {
+.problem-card:hover,
+.problem-card:has(.problem-card-btn:focus-visible) {
     background: var(--bg-card-hover);
     border-color: var(--border-default);
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg), var(--shadow-glow);
 }
 
-.problem-card:hover::before {
+.problem-card:hover::before,
+.problem-card:has(.problem-card-btn:focus-visible)::before {
     opacity: 1;
+}
+
+/* Focus ring no botão do card — sobrescreve o global para usar a borda do card */
+.problem-card-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
 }
 
 .problem-card-header {

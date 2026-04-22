@@ -18,12 +18,13 @@ class StepController {
      * Initialize with DOM elements
      */
     init() {
-        this.prevBtn = document.getElementById('prevBtn');
-        this.nextBtn = document.getElementById('nextBtn');
-        this.solutionBtn = document.getElementById('solutionBtn');
-        this.resetBtn = document.getElementById('resetBtn');
-        this.stepCurrent = document.getElementById('stepCurrent');
-        this.stepTotal = document.getElementById('stepTotal');
+        this.prevBtn       = document.getElementById('prevBtn');
+        this.nextBtn       = document.getElementById('nextBtn');
+        this.solutionBtn   = document.getElementById('solutionBtn');
+        this.resetBtn      = document.getElementById('resetBtn');
+        this.stepCurrent   = document.getElementById('stepCurrent');
+        this.stepTotal     = document.getElementById('stepTotal');
+        this.stepIndicator = document.getElementById('stepIndicator');
 
         this.bindEvents();
     }
@@ -50,14 +51,11 @@ class StepController {
      * Update step display
      */
     updateDisplay(current, total) {
-        if (this.stepCurrent) {
-            this.stepCurrent.textContent = current;
+        if (this.stepCurrent) this.stepCurrent.textContent = current;
+        if (this.stepTotal)   this.stepTotal.textContent   = total;
+        if (this.stepIndicator) {
+            this.stepIndicator.setAttribute('aria-label', `Passo ${current} de ${total}`);
         }
-        if (this.stepTotal) {
-            this.stepTotal.textContent = total;
-        }
-
-        // Update button states
         this.updateButtonStates(current, total);
     }
 
@@ -73,10 +71,9 @@ class StepController {
         // Next button: disabled if at end
         if (this.nextBtn) {
             const isAtEnd = current >= total;
-            this.nextBtn.disabled = isAtEnd;
-            this.nextBtn.textContent = isAtEnd 
-                ? 'Concluído ✓' 
-                : 'Próximo Passo →';
+            this.nextBtn.disabled   = isAtEnd;
+            this.nextBtn.textContent = isAtEnd ? 'Concluído ✓' : 'Próximo Passo →';
+            this.nextBtn.setAttribute('aria-label', isAtEnd ? 'Problema concluído' : 'Próximo passo');
         }
 
         // Solution button: disabled if at end

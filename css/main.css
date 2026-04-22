@@ -12,6 +12,18 @@
   box-sizing: border-box;
 }
 
+/* ── Focus-visible ring ─────────────────────────────────────────────────────
+   Mouse users: no visible outline (browser default suppressed).
+   Keyboard users: clear 2px ring so every interactive element is reachable. */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
 /* Design Tokens */
 :root {
   /* Colors - Status */

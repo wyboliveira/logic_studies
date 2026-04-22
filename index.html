@@ -34,21 +34,23 @@
       <!-- Main Content -->
       <main class="main-content">
         <!-- Problem Selection Screen -->
-        <section id="problem-list-screen" class="screen active">
+        <section id="problem-list-screen" class="screen active" aria-label="Lista de problemas">
           <div class="list-header">
             <h2 class="section-title">Escolha um problema</h2>
-            <div class="progress-summary" id="progressSummary" aria-live="polite"></div>
+            <div class="progress-summary" id="progressSummary" aria-live="polite" aria-atomic="true"></div>
           </div>
-          <div class="problem-cards" id="problemCards">
+          <div class="problem-cards" id="problemCards" role="list">
             <!-- Cards serão inseridos via JavaScript -->
           </div>
         </section>
 
         <!-- Problem Solving Screen -->
-        <section id="problem-screen" class="screen">
+        <section id="problem-screen" class="screen" aria-labelledby="problemTitle">
           <!-- Problem Statement -->
           <div class="problem-container">
-            <button class="back-btn" id="backBtn"><span>←</span> Voltar</button>
+            <button class="back-btn" id="backBtn" aria-label="Voltar à lista de problemas">
+              <span aria-hidden="true">←</span> Voltar
+            </button>
 
             <div class="problem-header">
               <span class="difficulty-badge" id="difficultyBadge">Fácil</span>
@@ -64,25 +66,27 @@
 
           <!-- Visualization Area -->
           <div class="visualization-container">
-            <div class="step-indicator">
-              <span class="step-label">Passo</span>
-              <span class="step-current" id="stepCurrent">0</span>
-              <span class="step-separator">/</span>
-              <span class="step-total" id="stepTotal">0</span>
+            <div class="step-indicator" id="stepIndicator" role="status" aria-label="Passo 0 de 0" aria-live="polite">
+              <span class="step-label" aria-hidden="true">Passo</span>
+              <span class="step-current" id="stepCurrent" aria-hidden="true">0</span>
+              <span class="step-separator" aria-hidden="true">/</span>
+              <span class="step-total" id="stepTotal" aria-hidden="true">0</span>
             </div>
 
-            <div class="visualization-area" id="visualizationArea">
+            <div class="visualization-area" id="visualizationArea"
+                 role="region" aria-label="Visualização do problema" aria-live="polite" aria-atomic="true">
               <!-- Tabela, diagrama ou lista será renderizada aqui -->
             </div>
           </div>
 
           <!-- Explanation Area -->
           <div class="explanation-container">
-            <div class="explanation-header">
+            <div class="explanation-header" aria-hidden="true">
               <span class="explanation-icon">💡</span>
               <h3>O que estamos fazendo?</h3>
             </div>
-            <div class="explanation-content" id="explanationContent">
+            <div class="explanation-content" id="explanationContent"
+                 aria-live="polite" aria-atomic="true">
               <p class="instruction" id="instruction">
                 Clique em "Próximo Passo" para começar!
               </p>
@@ -92,23 +96,30 @@
           </div>
 
           <!-- Controls -->
-          <div class="controls-container">
-            <button class="control-btn secondary" id="prevBtn" disabled>
-              <span>←</span> Voltar Passo
+          <div class="controls-container" role="group" aria-label="Controles de navegação">
+            <button class="control-btn secondary" id="prevBtn" disabled
+                    aria-label="Passo anterior">
+              <span aria-hidden="true">←</span> Voltar Passo
             </button>
-            <button class="control-btn primary" id="nextBtn">
-              Próximo Passo <span>→</span>
+            <button class="control-btn primary" id="nextBtn"
+                    aria-label="Próximo passo">
+              Próximo Passo <span aria-hidden="true">→</span>
             </button>
-            <button class="control-btn accent" id="solutionBtn">
+            <button class="control-btn accent" id="solutionBtn"
+                    aria-label="Ver solução completa">
               Ver Solução Completa
             </button>
-            <button class="control-btn reset" id="resetBtn">↺ Recomeçar</button>
+            <button class="control-btn reset" id="resetBtn"
+                    aria-label="Recomeçar problema">
+              <span aria-hidden="true">↺</span> Recomeçar
+            </button>
           </div>
 
           <!-- Summary (shown at the end) -->
-          <div class="summary-container hidden" id="summaryContainer">
+          <div class="summary-container hidden" id="summaryContainer"
+               aria-live="assertive" aria-atomic="true">
             <div class="summary-header">
-              <span class="summary-icon">✅</span>
+              <span class="summary-icon" aria-hidden="true">✅</span>
               <h3>Problema Resolvido!</h3>
             </div>
             <div class="summary-content">
