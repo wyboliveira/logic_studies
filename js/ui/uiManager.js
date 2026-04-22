@@ -7,9 +7,10 @@ class UIManager {
     constructor() {
         this.screens = { list: null, problem: null };
         this.elements = {};
-        // Cached for re-render when returning to list screen
         this._problems = null;
         this._onSelect = null;
+        // Visualizer registry — populated in init() after all globals are defined
+        this._visualizers = {};
     }
 
     init() {
@@ -35,6 +36,16 @@ class UIManager {
         if (this.elements.backBtn) {
             this.elements.backBtn.addEventListener('click', () => this.showListScreen());
         }
+
+        this._visualizers = {
+            table:    tableVisualizer,
+            sequence: sequenceVisualizer,
+            order:    listVisualizer,
+        };
+    }
+
+    registerVisualizer(type, visualizer) {
+        this._visualizers[type] = visualizer;
     }
 
     showListScreen() {
@@ -63,11 +74,18 @@ class UIManager {
         problems.forEach(problem => {
             const difficultyClass = this.getDifficultyClass(problem.difficulty);
             const isCompleted     = completedIds.includes(problem.id);
+            const stepsLabel      = isCompleted ? 'Concluído' : `${problem.steps.length} passos`;
+            const ariaLabel       = `${problem.title} — ${this.getTypeLabel(problem.type)}, ${problem.difficulty}. ${stepsLabel}.`;
 
             html += `
-                <div class="problem-card${isCompleted ? ' completed' : ''}" data-problem-id="${problem.id}">
+                <div class="problem-card${isCompleted ? ' completed' : ''}"
+                     data-problem-id="${problem.id}"
+                     role="listitem">
+                  <button class="problem-card-btn"
+                          aria-label="${ariaLabel}"
+                          data-problem-id="${problem.id}">
                     <div class="problem-card-header">
-                        <div class="problem-card-icon">${problem.icon}</div>
+                        <div class="problem-card-icon" aria-hidden="true">${problem.icon}</div>
                         <div>
                             <div class="problem-card-title">${problem.title}</div>
                             <div class="problem-card-type">${this.getTypeLabel(problem.type)}</div>
@@ -75,21 +93,22 @@ class UIManager {
                     </div>
                     <div class="problem-card-description">${problem.description}</div>
                     <div class="problem-card-footer">
-                        <span class="difficulty-badge ${difficultyClass}">${problem.difficulty}</span>
+                        <span class="difficulty-badge ${difficultyClass}" aria-hidden="true">${problem.difficulty}</span>
                         ${isCompleted
-                            ? '<span class="completed-indicator">✓ Concluído</span>'
-                            : `<span class="problem-card-steps">${problem.steps.length} passos</span>`
+                            ? '<span class="completed-indicator" aria-hidden="true">✓ Concluído</span>'
+                            : `<span class="problem-card-steps" aria-hidden="true">${problem.steps.length} passos</span>`
                         }
                     </div>
+                  </button>
                 </div>
             `;
         });
 
         this.elements.problemCards.innerHTML = html;
 
-        this.elements.problemCards.querySelectorAll('.problem-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const problemId = parseInt(card.dataset.problemId);
+        this.elements.problemCards.querySelectorAll('.problem-card-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const problemId = parseInt(btn.dataset.problemId);
                 if (onSelect) onSelect(problemId);
             });
         });
@@ -228,12 +247,7 @@ class UIManager {
     }
 
     getVisualizer(type) {
-        switch (type) {
-            case 'table':    return tableVisualizer;
-            case 'sequence': return sequenceVisualizer;
-            case 'order':    return listVisualizer;
-            default:         return null;
-        }
+        return this._visualizers[type] ?? null;
     }
 
     renderVisualization(type, state) {
