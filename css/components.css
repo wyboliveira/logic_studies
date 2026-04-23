@@ -1589,6 +1589,17 @@
 .file-name { flex: 1; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .file-size { color: var(--text-muted); white-space: nowrap; }
 
+.file-embed-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.file-embed-yes { background: #d1fae5; color: #065f46; }
+.file-embed-no  { background: #fef3c7; color: #92400e; }
+
 .file-remove {
     background: none;
     border: none;
