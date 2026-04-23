@@ -25,16 +25,16 @@ Existe escassez de conteúdo organizado, lúdico e explicativo sobre lógica par
 
 ## Stack
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Linguagem | Vanilla JavaScript (ES6+, globals de browser) |
-| Estilo | CSS3 com Custom Properties |
-| Fonte | Google Fonts — Inter |
-| Animações | [Anime.js v3.2.2](https://animejs.com/) via CDN |
-| Testes | [Vitest](https://vitest.dev/) + Node.js `vm` para sandbox de browser globals |
-| Deploy | [Firebase Hosting](https://firebase.google.com/products/hosting) |
-| CI/CD | GitHub Actions (testa → deploya em push para `main`) |
-| Build | Nenhum — site estático puro |
+| Camada    | Tecnologia                                                                   |
+| --------- | ---------------------------------------------------------------------------- |
+| Linguagem | Vanilla JavaScript (ES6+, globals de browser)                                |
+| Estilo    | CSS3 com Custom Properties                                                   |
+| Fonte     | Google Fonts — Inter                                                         |
+| Animações | [Anime.js v3.2.2](https://animejs.com/) via CDN                              |
+| Testes    | [Vitest](https://vitest.dev/) + Node.js `vm` para sandbox de browser globals |
+| Deploy    | [Firebase Hosting](https://firebase.google.com/products/hosting)             |
+| CI/CD     | GitHub Actions (testa → deploya em push para `main`)                         |
+| Build     | Nenhum — site estático puro                                                  |
 
 ---
 
@@ -109,73 +109,73 @@ problemData.js  ──►  ProblemEngine  ──►  StepController
 
 ### Tabelas Lógicas (16 problemas)
 
-| # | Título | Tamanho | Dificuldade |
-|---|--------|---------|-------------|
-| 1 | Quem ocupa cada cargo? | 3×3 | Fácil |
-| 4 | Moradores e apartamentos | 3×3 | Médio |
-| 6 | Frutas e cores | 3×3 | Fácil |
-| 7 | Esportes da semana | 3×3 | Fácil |
-| 8 | Amigos e profissões | 4×4 | Médio |
-| 10 | O jantar dos cinco amigos | 5×5 | Difícil |
-| 11 | Quem tem qual animal? | 3×3 | Fácil |
-| 13 | Quando cada um estuda? | 3×3 | Fácil |
-| 16 | Funcionários e departamentos | 4×4 | Médio |
-| 18 | Como cada um vai ao trabalho? | 3×3 | Fácil |
-| 20 | Quem fala qual idioma? | 4×4 | Médio |
-| 22 | Qual cor cada um usa? | 3×3 | Fácil |
-| 24 | Servidores e seus cargos | 5×5 | Difícil |
-| 26 | Destinos de viagem | 4×4 | Médio |
-| 28 | Flores e suas cores | 3×3 | Fácil |
-| 30 | Professores e suas disciplinas | 5×5 | Difícil |
+| #   | Título                         | Tamanho | Dificuldade |
+| --- | ------------------------------ | ------- | ----------- |
+| 1   | Quem ocupa cada cargo?         | 3×3     | Fácil       |
+| 4   | Moradores e apartamentos       | 3×3     | Médio       |
+| 6   | Frutas e cores                 | 3×3     | Fácil       |
+| 7   | Esportes da semana             | 3×3     | Fácil       |
+| 8   | Amigos e profissões            | 4×4     | Médio       |
+| 10  | O jantar dos cinco amigos      | 5×5     | Difícil     |
+| 11  | Quem tem qual animal?          | 3×3     | Fácil       |
+| 13  | Quando cada um estuda?         | 3×3     | Fácil       |
+| 16  | Funcionários e departamentos   | 4×4     | Médio       |
+| 18  | Como cada um vai ao trabalho?  | 3×3     | Fácil       |
+| 20  | Quem fala qual idioma?         | 4×4     | Médio       |
+| 22  | Qual cor cada um usa?          | 3×3     | Fácil       |
+| 24  | Servidores e seus cargos       | 5×5     | Difícil     |
+| 26  | Destinos de viagem             | 4×4     | Médio       |
+| 28  | Flores e suas cores            | 3×3     | Fácil       |
+| 30  | Professores e suas disciplinas | 5×5     | Difícil     |
 
 ### Sequências Numéricas (9 problemas)
 
-| # | Título | Padrão | Dificuldade |
-|---|--------|--------|-------------|
-| 2 | Complete a sequência | PG ×2 | Fácil |
-| 5 | Sequência alternada | Dois intercalados | Médio |
-| 9 | Sequência de Fibonacci | Soma dos dois anteriores | Médio |
-| 12 | Sequência dos quadrados | n² | Fácil |
-| 14 | Progressão aritmética | PA r=3 | Fácil |
-| 17 | Diferença que cresce | 2ª ordem | Médio |
-| 21 | Números triangulares | n(n+1)/2 | Médio |
-| 25 | Progressão geométrica | PG r=3 | Fácil |
-| 29 | Tabuada do 7 como sequência | PA r=7 | Fácil |
+| #   | Título                      | Padrão                   | Dificuldade |
+| --- | --------------------------- | ------------------------ | ----------- |
+| 2   | Complete a sequência        | PG ×2                    | Fácil       |
+| 5   | Sequência alternada         | Dois intercalados        | Médio       |
+| 9   | Sequência de Fibonacci      | Soma dos dois anteriores | Médio       |
+| 12  | Sequência dos quadrados     | n²                       | Fácil       |
+| 14  | Progressão aritmética       | PA r=3                   | Fácil       |
+| 17  | Diferença que cresce        | 2ª ordem                 | Médio       |
+| 21  | Números triangulares        | n(n+1)/2                 | Médio       |
+| 25  | Progressão geométrica       | PG r=3                   | Fácil       |
+| 29  | Tabuada do 7 como sequência | PA r=7                   | Fácil       |
 
 ### Ordenação / Posição (5 problemas)
 
-| # | Título | Pessoas | Dificuldade |
-|---|--------|---------|-------------|
-| 3 | Quem está em qual posição? | 4 | Médio |
-| 15 | Fila do banco | 4 | Médio |
-| 19 | Chegada na prova de natação | 5 | Médio |
-| 23 | Ordem das entrevistas | 4 | Médio |
-| 27 | Corrida de bicicleta | 5 | Difícil |
+| #   | Título                      | Pessoas | Dificuldade |
+| --- | --------------------------- | ------- | ----------- |
+| 3   | Quem está em qual posição?  | 4       | Médio       |
+| 15  | Fila do banco               | 4       | Médio       |
+| 19  | Chegada na prova de natação | 5       | Médio       |
+| 23  | Ordem das entrevistas       | 4       | Médio       |
+| 27  | Corrida de bicicleta        | 5       | Difícil     |
 
 ### Proposições Lógicas (4 problemas) — novo
 
-| # | Título | Conceito | Dificuldade |
-|---|--------|----------|-------------|
-| 31 | Modus Ponens | Se P→Q e P, então Q | Fácil |
-| 32 | Modus Tollens | Se P→Q e ¬Q, então ¬P | Médio |
-| 33 | Silogismo Hipotético | P→Q, Q→R, logo P→R | Médio |
-| 34 | Falácia do Consequente | Afirmar Q não implica P | Difícil |
+| #   | Título                 | Conceito                | Dificuldade |
+| --- | ---------------------- | ----------------------- | ----------- |
+| 31  | Modus Ponens           | Se P→Q e P, então Q     | Fácil       |
+| 32  | Modus Tollens          | Se P→Q e ¬Q, então ¬P   | Médio       |
+| 33  | Silogismo Hipotético   | P→Q, Q→R, logo P→R      | Médio       |
+| 34  | Falácia do Consequente | Afirmar Q não implica P | Difícil     |
 
 ### Diagramas de Venn (3 problemas) — novo
 
-| # | Título | Conceito | Dificuldade |
-|---|--------|----------|-------------|
-| 35 | Esportes na turma | Inclusão-exclusão básica | Fácil |
-| 36 | Idiomas no curso | Isolando a interseção | Médio |
-| 37 | Aprovação em provas | Exclusiva de cada conjunto | Médio |
+| #   | Título              | Conceito                   | Dificuldade |
+| --- | ------------------- | -------------------------- | ----------- |
+| 35  | Esportes na turma   | Inclusão-exclusão básica   | Fácil       |
+| 36  | Idiomas no curso    | Isolando a interseção      | Médio       |
+| 37  | Aprovação em provas | Exclusiva de cada conjunto | Médio       |
 
 ### Verdadeiro / Falso (3 problemas) — novo
 
-| # | Título | Restrição | Dificuldade |
-|---|--------|-----------|-------------|
-| 38 | Ana e Beto mentem? | Exatamente 1 mentiroso | Fácil |
-| 39 | Três Suspeitos | Exatamente 1 verdadeiro | Médio |
-| 40 | Quem roubou o troféu? | Exatamente 2 verdadeiros | Médio |
+| #   | Título                | Restrição                | Dificuldade |
+| --- | --------------------- | ------------------------ | ----------- |
+| 38  | Ana e Beto mentem?    | Exatamente 1 mentiroso   | Fácil       |
+| 39  | Três Suspeitos        | Exatamente 1 verdadeiro  | Médio       |
+| 40  | Quem roubou o troféu? | Exatamente 2 verdadeiros | Médio       |
 
 ---
 
@@ -188,6 +188,7 @@ Dois grupos de chips acima dos cards permitem filtrar a lista simultaneamente po
 ### Dicas progressivas
 
 Cada passo exibe apenas a instrução por padrão. O botão **"💡 Ver Dica"** na área de explicação:
+
 - Primeiro clique → revela a explicação detalhada
 - Segundo clique → revela a dica adicional (quando existe)
 - Desabilitado quando todas as dicas já foram exibidas
@@ -198,6 +199,7 @@ Ao usar "Ver Solução Completa", todas as dicas do último passo são exibidas 
 ### Modal de dúvidas
 
 O botão flutuante **"✉️ Dúvidas?"** (canto inferior direito) abre um modal com:
+
 - Campo de título e campo de descrição
 - Zona de drop de arquivos (imagens, PDF) com lista de arquivos e botão de remoção
 - Estado de carregamento durante o envio
@@ -208,13 +210,13 @@ O botão flutuante **"✉️ Dúvidas?"** (canto inferior direito) abre um modal
 
 ## Navegação por Teclado
 
-| Tecla | Ação |
-|-------|------|
-| `→` ou `Space` | Próximo passo |
-| `←` | Passo anterior |
-| `H` | Revelar próxima dica |
-| `R` | Reiniciar o problema |
-| `Escape` | Voltar para o menu / fechar modal |
+| Tecla          | Ação                              |
+| -------------- | --------------------------------- |
+| `→` ou `Space` | Próximo passo                     |
+| `←`            | Passo anterior                    |
+| `H`            | Revelar próxima dica              |
+| `R`            | Reiniciar o problema              |
+| `Escape`       | Voltar para o menu / fechar modal |
 
 ---
 
@@ -255,11 +257,11 @@ npm run test:coverage
 
 ### Cobertura dos testes
 
-| Arquivo | Testes | O que valida |
-|---------|--------|-------------|
-| `engine.test.js` | 15 | `loadProblem`, `nextStep`, `prevStep`, `reset`, `showSolution`, imutabilidade de estado |
-| `problems.test.js` | 84 | Todos os 40 problemas carregam e resolvem; bijeção em tabelas; valor final em sequências; slots preenchidos em ordenação; conclusão válida em proposições; regiões preenchidas em Venn; papéis revelados em verdadeiro/falso |
-| `progressManager.test.js` | 9 | Estado inicial, `markCompleted`, deduplicação, múltiplos IDs, `reset`, isolamento entre instâncias |
+| Arquivo                   | Testes | O que valida                                                                                                                                                                                                                 |
+| ------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `engine.test.js`          | 15     | `loadProblem`, `nextStep`, `prevStep`, `reset`, `showSolution`, imutabilidade de estado                                                                                                                                      |
+| `problems.test.js`        | 84     | Todos os 40 problemas carregam e resolvem; bijeção em tabelas; valor final em sequências; slots preenchidos em ordenação; conclusão válida em proposições; regiões preenchidas em Venn; papéis revelados em verdadeiro/falso |
+| `progressManager.test.js` | 9      | Estado inicial, `markCompleted`, deduplicação, múltiplos IDs, `reset`, isolamento entre instâncias                                                                                                                           |
 
 ### Por que `vm` do Node.js?
 
@@ -267,8 +269,14 @@ Os arquivos source usam globals de browser (sem `export`). O helper `testContext
 
 ```js
 const vmCtx = vm.createContext({ structuredClone });
-vm.runInContext(`(function(){ ${dataSrc}\n this.PROBLEMS = PROBLEMS; }).call(this)`, vmCtx);
-vm.runInContext(`(function(){ ${engineSrc}\n this.ProblemEngine = ProblemEngine; }).call(this)`, vmCtx);
+vm.runInContext(
+  `(function(){ ${dataSrc}\n this.PROBLEMS = PROBLEMS; }).call(this)`,
+  vmCtx,
+);
+vm.runInContext(
+  `(function(){ ${engineSrc}\n this.ProblemEngine = ProblemEngine; }).call(this)`,
+  vmCtx,
+);
 ```
 
 O mesmo padrão é usado nos testes do `progressManager`, injetando um mock de `localStorage` no contexto vm para isolamento total entre testes.
@@ -302,9 +310,9 @@ Qualquer push na branch `main` dispara o workflow `.github/workflows/deploy.yml`
 
 ## Branches
 
-| Branch | Propósito |
-|--------|-----------|
-| `main` | Produção — deploya automaticamente |
+| Branch    | Propósito                                     |
+| --------- | --------------------------------------------- |
+| `main`    | Produção — deploya automaticamente            |
 | `develop` | Desenvolvimento ativo — PRs e commits diários |
 
 ---
@@ -322,13 +330,9 @@ Qualquer push na branch `main` dispara o workflow `.github/workflows/deploy.yml`
 - [x] **Expansão de tipos** — Proposições Lógicas, Diagramas de Venn, Verdadeiro/Falso
 - [x] **Expansão de conteúdo** — 10 → 40 problemas
 - [x] **UX** — Filtros por tipo e dificuldade, dicas progressivas, modal de dúvidas
+- [x] **Email** — Conectar modal de dúvidas ao EmailJS para envio real
 
 ### Próximas fases
-
-- [ ] **Email** — Conectar modal de dúvidas ao EmailJS para envio real
-- [ ] **Busca textual** — Filtrar problemas por palavra-chave no título/descrição
-- [ ] **Modo estudo** — Agrupamento por tema (concursos específicos, bancas)
-- [ ] **Estatísticas** — Percentual de conclusão por tipo e dificuldade
 
 ---
 
