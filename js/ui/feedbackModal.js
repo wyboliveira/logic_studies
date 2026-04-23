@@ -14,9 +14,9 @@
  * ──────────────────────────────────────────────────────────────────────────────
  */
 
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'AbCdEfGhIjKlMnOp'
+const EMAILJS_SERVICE_ID  = 'service_godgbyj';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'template_umyupqg';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'iNR_UkvQwRqzWeGn9';   // e.g. 'AbCdEfGhIjKlMnOp'
 
 // Images under this limit are embedded as base64; larger files are listed by name only.
 const MAX_EMBED_BYTES = 300 * 1024; // 300 KB
