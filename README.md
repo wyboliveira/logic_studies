@@ -322,13 +322,10 @@ Qualquer push na branch `main` dispara o workflow `.github/workflows/deploy.yml`
 - [x] **Expansão de tipos** — Proposições Lógicas, Diagramas de Venn, Verdadeiro/Falso
 - [x] **Expansão de conteúdo** — 10 → 40 problemas
 - [x] **UX** — Filtros por tipo e dificuldade, dicas progressivas, modal de dúvidas
+- [x] **Email** — Conectar modal de dúvidas ao EmailJS para envio real
 
 ### Próximas fases
 
-- [ ] **Email** — Conectar modal de dúvidas ao EmailJS para envio real
-- [ ] **Busca textual** — Filtrar problemas por palavra-chave no título/descrição
-- [ ] **Modo estudo** — Agrupamento por tema (concursos específicos, bancas)
-- [ ] **Estatísticas** — Percentual de conclusão por tipo e dificuldade
 
 ---
 
